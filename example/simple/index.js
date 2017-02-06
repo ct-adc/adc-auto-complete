@@ -32,6 +32,9 @@ var a=new Vue({
     methods:{
         select:function(item){
             this.value=item;
+        },
+        getValue:function(){
+            console.log(this.$refs.autoC.getValue());
         }
     }
 });

@@ -157,6 +157,9 @@
                 }else{
                     return that.value;
                 }
+            },
+            getValue(){
+                return JSON.parse(JSON.stringify(this.value));
             }
         },
         watch:{

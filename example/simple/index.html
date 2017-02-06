@@ -14,7 +14,9 @@
                        :show-keys="showKeys"
                        :all-for-empty="allForEmpty"
                        :value="value"
-                       @select="select"></auto-complete>
+                       @select="select" ref="autoC"></auto-complete>
+
+          <button type="button" class="btn btn-default" @click="getValue">get value</button>
       </div>
 
 
