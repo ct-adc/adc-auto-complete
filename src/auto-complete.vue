@@ -68,6 +68,9 @@
                 listVisible: false
             }
         },
+        created(){
+            this.completeValue();
+        },
         mounted(){
             this.input=this.selectedContent;
             window.addEventListener('click', this.clickHandler);

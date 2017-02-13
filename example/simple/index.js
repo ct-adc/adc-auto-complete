@@ -22,7 +22,7 @@ var list=[
 var a=new Vue({
     el:'#app',
     data:{
-        list:[],
+        list:list,
         keys:['Id','Name'],
         matchKeys:['Id','Name'],
         showKeys:['Name'],
@@ -39,6 +39,6 @@ var a=new Vue({
     }
 });
 
-setTimeout(function(){
-    a.list=list;
-},3000);
+//setTimeout(function(){
+//    a.list=list;
+//},3000);
