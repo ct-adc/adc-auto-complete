@@ -2,7 +2,7 @@
     <div class="form-group autoComplete">
         <div class="col-lg-8 col-sm-8">
             <div class="dropdown">
-                <input type="text" ref="input" class="form-control" v-model="input" @focus="focus"/>
+                <input type="text" ref="input" class="form-control" v-model="input" @focus="focus" :placeholder="placeholder"/>
                 <template v-if="listVisible">
                     <ul class="dropdown-menu" v-show="matched.length>0">
                         <li v-for="item in matched"
@@ -60,6 +60,10 @@
                 default(){
                     return {};
                 }
+            },
+            placeholder:{
+                type:String,
+                default:'输入内容后自动匹配...'
             }
         },
         data(){
@@ -82,11 +86,16 @@
             matched(){
                 var that = this;
                 if (that.input != '') {
-                    return that.list.filter(function (item) {
+                    var matched=that.list.filter(function (item) {
                         return that.matchKeys.some(function (key) {
                             return (item[key] + '').indexOf(that.input) > -1;
                         })
                     })
+                    if(matched.length>0){
+                        return matched;
+                    }else{
+                        return [that.value];
+                    }
                 } else if (that.allForEmpty) {
                     return that.list;
                 } else {

@@ -25,9 +25,10 @@ var a=new Vue({
         list:list,
         keys:['Id','Name'],
         matchKeys:['Id','Name'],
-        showKeys:['Name'],
+        showKeys:['Id','Name'],
         allForEmpty:true,
-        value:{Id:1}
+        value:{Id:1},
+        placeholder:'请选择游戏'
     },
     methods:{
         select:function(item){
