@@ -17,17 +17,20 @@ var list=[
     {
         Id:3,
         Name:'three'
+    },{
+        Id:'',
+        Name:'空值'
     }
 ];
 var a=new Vue({
     el:'#app',
     data:{
-        list:list,
+        list:[],
         keys:['Id','Name'],
         matchKeys:['Id','Name'],
-        showKeys:['Id','Name'],
+        showKeys:['Name'],
         allForEmpty:true,
-        value:{Id:1},
+        value:{Id:''},
         placeholder:'请选择游戏'
     },
     methods:{
@@ -36,10 +39,13 @@ var a=new Vue({
         },
         getValue:function(){
             console.log(this.$refs.autoC.getValue());
+        },
+        reset:function(){
+            this.value={};
         }
     }
 });
 
-//setTimeout(function(){
-//    a.list=list;
-//},3000);
+setTimeout(function(){
+    a.list=list;
+},3000);

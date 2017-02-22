@@ -160,11 +160,13 @@
                             })
                             return matchItems.length>0;
                         });
-                        this.$emit('select',JSON.parse(JSON.stringify(targetItems[0])));
-                        that.$nextTick(function(){
-                            that.input=that.selectedContent;
-                        })
-                        return targetItems[0];
+                        if(targetItems.length>0){
+                            this.$emit('select',JSON.parse(JSON.stringify(targetItems[0])));
+                            that.$nextTick(function(){
+                                that.input=that.selectedContent;
+                            })
+                            return targetItems[0];
+                        }
                     }
                 }else{
                     return that.value;
@@ -179,7 +181,11 @@
                 this.completeValue();
             },
             value(){
-                this.completeValue();
+                if(Object.keys(this.value).length>0){
+                    this.completeValue();
+                }else{
+                    this.input = this.selectedContent;
+                }
             }
         }
     };
