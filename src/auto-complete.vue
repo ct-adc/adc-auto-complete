@@ -1,25 +1,23 @@
 <template>
     <div class="form-group autoComplete">
-        <div class="col-lg-8 col-sm-8">
-            <div class="dropdown">
-                <input type="text" ref="input" class="form-control" v-model="input" @focus="focus" :placeholder="placeholder"/>
-                <template v-if="listVisible">
-                    <ul class="dropdown-menu" v-show="matched.length>0">
-                        <li v-for="item in matched"
-                            @click="select(item)">
-                            <a>
-                            <span v-for="(key,index) in keys">
-                                {{item[key]}}
-                                <span v-if="index!=keys.length-1">|</span>
-                            </span>
-                            </a>
-                        </li>
-                    </ul>
-                    <ul class="dropdown-menu" v-show="matched.length===0">
-                        <li class="noResult">{{info}}</li>
-                    </ul>
-                </template>
-            </div>
+        <div class="dropdown">
+            <input type="text" ref="input" class="form-control" v-model="input" @focus="focus" :placeholder="placeholder"/>
+            <template v-if="listVisible">
+                <ul class="dropdown-menu" v-show="matched.length>0">
+                    <li v-for="item in matched"
+                        @click="select(item)">
+                        <a>
+                        <span v-for="(key,index) in keys">
+                            {{item[key]}}
+                            <span v-if="index!=keys.length-1">|</span>
+                        </span>
+                        </a>
+                    </li>
+                </ul>
+                <ul class="dropdown-menu" v-show="matched.length===0">
+                    <li class="noResult">{{info}}</li>
+                </ul>
+            </template>
         </div>
     </div>
 </template>
