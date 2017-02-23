@@ -1,5 +1,5 @@
 <template>
-    <div class="form-group autoComplete">
+    <div class="autoComplete">
         <div class="dropdown">
             <input type="text" ref="input" class="form-control" v-model="input" @focus="focus" :placeholder="placeholder"/>
             <template v-if="listVisible">
