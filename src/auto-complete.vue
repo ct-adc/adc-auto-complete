@@ -1,7 +1,8 @@
 <template>
-    <div class="form-group autoComplete">
+    <div class="autoComplete">
         <div class="dropdown">
-            <input type="text" ref="input" class="form-control" v-model="input" @focus="focus" :placeholder="placeholder"/>
+            <input type="text" ref="input" class="form-control" v-model="input" @focus="focus"
+                   :placeholder="placeholder"/>
             <template v-if="listVisible">
                 <ul class="dropdown-menu" v-show="matched.length>0">
                     <li v-for="item in matched"
@@ -53,15 +54,15 @@
                     return ['Id', 'Name'];
                 }
             },
-            value:{
-                type:Object,
+            value: {
+                type: Object,
                 default(){
                     return {};
                 }
             },
-            placeholder:{
-                type:String,
-                default:'输入内容后自动匹配...'
+            placeholder: {
+                type: String,
+                default: '输入内容后自动匹配...'
             }
         },
         data(){
@@ -74,25 +75,27 @@
             this.completeValue();
         },
         mounted(){
-            this.input=this.selectedContent;
+            this.input = this.selectedContent;
             window.addEventListener('click', this.clickHandler);
         },
         beforeDestroy(){
-            window.removeEventListener('click',this.clickHandler);
+            window.removeEventListener('click', this.clickHandler);
         },
         computed: {
             matched(){
                 var that = this;
                 if (that.input != '') {
-                    var matched=that.list.filter(function (item) {
+                    var matched = that.list.filter(function (item) {
                         return that.matchKeys.some(function (key) {
                             return (item[key] + '').indexOf(that.input) > -1;
                         })
                     })
-                    if(matched.length>0){
+                    if (matched.length > 0) {
                         return matched;
-                    }else{
+                    } else if (this.selectedContent.indexOf(this.input) > -1) {
                         return [that.value];
+                    } else {
+                        return [];
                     }
                 } else if (that.allForEmpty) {
                     return that.list;
@@ -110,22 +113,28 @@
             },
             selectedContent(){
                 var content = [];
-                var that=this;
+                var that = this;
                 that.showKeys.map(function (key) {
-                    content.push(that.value[key]);
+                    if(typeof that.value[key]!='undefined'){
+                        content.push(that.value[key]);
+                    }
                 })
-                return content.join('|');
+                if(content.length>0){
+                    return content.join('|');
+                }else{
+                    return '';
+                }
             }
         },
         methods: {
             clickHandler(event){
-                var that=this;
-                if(that.listVisible){
+                var that = this;
+                if (that.listVisible) {
                     if (event.target != that.$refs.input) {
                         that.listVisible = false;
                     }
                     if (that.input === '') {
-                        that.$emit('select',{});
+                        that.$emit('select', {});
                     } else {
                         that.input = that.selectedContent;
                     }
@@ -135,38 +144,38 @@
                 this.listVisible = true;
             },
             select(item){
-                this.$emit('select',JSON.parse(JSON.stringify(item)));
-                this.$nextTick(function(){
+                this.$emit('select', JSON.parse(JSON.stringify(item)));
+                this.$nextTick(function () {
                     this.input = this.selectedContent;
                 })
 
             },
             completeValue(){
-                var that=this;
-                var value=that.value;
-                var valueKeysCount=Object.keys(value).length;
-                var listIsNotEmpty=that.list.length>0;
-                if(valueKeysCount>0 && listIsNotEmpty){
-                    var simpleKeysCount=Object.keys(that.list[0]).length;
-                    var valueIsBroken=listIsNotEmpty && simpleKeysCount>valueKeysCount;
-                    if(valueIsBroken){
+                var that = this;
+                var value = that.value;
+                var valueKeysCount = Object.keys(value).length;
+                var listIsNotEmpty = that.list.length > 0;
+                if (valueKeysCount > 0 && listIsNotEmpty) {
+                    var simpleKeysCount = Object.keys(that.list[0]).length;
+                    var valueIsBroken = listIsNotEmpty && simpleKeysCount > valueKeysCount;
+                    if (valueIsBroken) {
                         //当value相比list是不完整对象时，根据list修正这个对象
-                        var targetItems=that.list.filter(function(item){
-                            var keysInSelected=Object.keys(value);
-                            var matchItems=keysInSelected.filter(function(i){
-                                return value[i]===item[i];
+                        var targetItems = that.list.filter(function (item) {
+                            var keysInSelected = Object.keys(value);
+                            var matchItems = keysInSelected.filter(function (i) {
+                                return value[i] === item[i];
                             })
-                            return matchItems.length>0;
+                            return matchItems.length > 0;
                         });
-                        if(targetItems.length>0){
-                            this.$emit('select',JSON.parse(JSON.stringify(targetItems[0])));
-                            that.$nextTick(function(){
-                                that.input=that.selectedContent;
+                        if (targetItems.length > 0) {
+                            this.$emit('select', JSON.parse(JSON.stringify(targetItems[0])));
+                            that.$nextTick(function () {
+                                that.input = that.selectedContent;
                             })
                             return targetItems[0];
                         }
                     }
-                }else{
+                } else {
                     return that.value;
                 }
             },
@@ -174,14 +183,14 @@
                 return JSON.parse(JSON.stringify(this.value));
             }
         },
-        watch:{
+        watch: {
             list(){
                 this.completeValue();
             },
             value(){
-                if(Object.keys(this.value).length>0){
+                if (Object.keys(this.value).length > 0) {
                     this.completeValue();
-                }else{
+                } else {
                     this.input = this.selectedContent;
                 }
             }
