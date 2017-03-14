@@ -154,12 +154,12 @@
                 }
                 if(completed){
                     this.selected=targetItems[0];
-                    that.$nextTick(function () {
-                        that.input = that.selectedContent;
-                    })
                 }else{
                     this.selected=that.value;
                 }
+                that.$nextTick(function () {
+                    that.input = that.selectedContent;
+                })
             },
             clickHandler(event){
                 var that = this;

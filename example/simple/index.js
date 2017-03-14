@@ -44,9 +44,7 @@ var a=new Vue({
             this.value={};
         },
         setValue:function(){
-            this.value={
-                Id:1
-            }
+            this.value={}
         }
     }
 });
