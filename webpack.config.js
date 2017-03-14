@@ -4,7 +4,8 @@ var webpack = require('webpack');
 module.exports = {
   context: path.resolve(__dirname, "./example"),
   entry: {
-    simple:'./simple/index.js'
+    simple:'./simple/index.js',
+    double:'./double/index.js'
   },
   output: {
     path: path.resolve(__dirname, './asset'),

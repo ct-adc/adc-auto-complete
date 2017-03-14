@@ -29,7 +29,12 @@ placeholder | 输入框的placeholder内容 | String | 输入内容后自动匹�
 
 * select事件
 
-当选中或未选中项目时，触发select事件；
+当选择一条数据时，触发select事件；
+
+* change事件
+
+当组件的selected发生改变时，触发change事件。
+注意:当数据由'空缺'状态变为'被补全'后，也会触发该事件;
 
 ## Q & A
 

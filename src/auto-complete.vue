@@ -23,6 +23,7 @@
     </div>
 </template>
 <script type="es6">
+    import utility from 'ct-utility';
     export default{
         name: 'auto-complete',
         props: {
@@ -68,11 +69,12 @@
         data(){
             return {
                 input: '',
-                listVisible: false
+                listVisible: false,
+                selected:{}
             }
         },
         created(){
-            this.completeValue();
+            this.initSelected();
         },
         mounted(){
             this.input = this.selectedContent;
@@ -93,7 +95,7 @@
                     if (matched.length > 0) {
                         return matched;
                     } else if (this.selectedContent.indexOf(this.input) > -1) {
-                        return [that.value];
+                        return [that.selected];
                     } else {
                         return [];
                     }
@@ -115,8 +117,8 @@
                 var content = [];
                 var that = this;
                 that.showKeys.map(function (key) {
-                    if(typeof that.value[key]!='undefined'){
-                        content.push(that.value[key]);
+                    if(typeof that.selected[key]!='undefined'){
+                        content.push(that.selected[key]);
                     }
                 })
                 if(content.length>0){
@@ -127,34 +129,12 @@
             }
         },
         methods: {
-            clickHandler(event){
-                var that = this;
-                if (that.listVisible) {
-                    if (event.target != that.$refs.input) {
-                        that.listVisible = false;
-                    }
-                    if (that.input === '') {
-                        that.$emit('select', {});
-                    } else {
-                        that.input = that.selectedContent;
-                    }
-                }
-            },
-            focus(){
-                this.listVisible = true;
-            },
-            select(item){
-                this.$emit('select', JSON.parse(JSON.stringify(item)));
-                this.$nextTick(function () {
-                    this.input = this.selectedContent;
-                })
-
-            },
-            completeValue(){
+            initSelected(){
                 var that = this;
                 var value = that.value;
                 var valueKeysCount = Object.keys(value).length;
                 var listIsNotEmpty = that.list.length > 0;
+                var completed=false;
                 if (valueKeysCount > 0 && listIsNotEmpty) {
                     var simpleKeysCount = Object.keys(that.list[0]).length;
                     var valueIsBroken = listIsNotEmpty && simpleKeysCount > valueKeysCount;
@@ -168,30 +148,60 @@
                             return matchItems.length > 0;
                         });
                         if (targetItems.length > 0) {
-                            this.$emit('select', JSON.parse(JSON.stringify(targetItems[0])));
-                            that.$nextTick(function () {
-                                that.input = that.selectedContent;
-                            })
-                            return targetItems[0];
+                            completed=true;
                         }
                     }
-                } else {
-                    return that.value;
+                }
+                if(completed){
+                    this.selected=targetItems[0];
+                    that.$nextTick(function () {
+                        that.input = that.selectedContent;
+                    })
+                }else{
+                    this.selected=that.value;
                 }
             },
+            clickHandler(event){
+                var that = this;
+                if (that.listVisible) {
+                    if (event.target != that.$refs.input) {
+                        that.listVisible = false;
+                    }
+                    if (that.input !== '') {
+                        that.input = that.selectedContent;
+                    }else{
+                        that.selected={};
+                    }
+                }
+            },
+            focus(){
+                this.listVisible = true;
+            },
+            select(item){
+                var selectedItem=JSON.parse(JSON.stringify(item));
+                this.$emit('select', selectedItem);
+                this.selected=selectedItem;
+                this.$nextTick(function () {
+                    this.input = this.selectedContent;
+                })
+            },
             getValue(){
-                return JSON.parse(JSON.stringify(this.value));
+                return JSON.parse(JSON.stringify(this.selected));
             }
         },
-        watch: {
-            list(){
-                this.completeValue();
-            },
+        watch:{
             value(){
-                if (Object.keys(this.value).length > 0) {
-                    this.completeValue();
-                } else {
-                    this.input = this.selectedContent;
+                this.initSelected();
+            },
+            list(){
+                this.initSelected();
+            },
+            selected(newVal,oldVal){
+                if(JSON.stringify(newVal) !== JSON.stringify(oldVal)){
+                    this.$emit('change',JSON.parse(JSON.stringify(this.selected)));
+                }
+                if(utility.base.isEmptyObject(newVal)){
+                    this.$emit('clear');
                 }
             }
         }

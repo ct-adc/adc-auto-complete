@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>list</title>
+    <link href="http://static.tcy365.com/cdn/bootstrap/3.3.5/css/bootstrap.dz.min.css" rel="stylesheet">
+    <link href="http://static.tcy365.com/cdn/bootstrap/3.3.5/css/theme.css" rel="stylesheet">
+</head>
+<body>
+
+<div id="app">
+    <auto-complete :list="data1.list"
+                   :keys="data1.keys"
+                   :match-keys="data1.matchKeys"
+                   :show-keys="data1.showKeys"
+                   :all-for-empty="data1.allForEmpty"
+                   :value="data1.value"
+                   :placeholder="data1.placeholder"
+                   @change="change"
+                   @clear="clear"
+                   @select="selectData1"></auto-complete>
+
+
+        <auto-complete :list="data2.list"
+                       :keys="data2.keys"
+                       :match-keys="data1.matchKeys"
+                       :show-keys="data2.showKeys"
+                       :all-for-empty="data2.allForEmpty"
+                       :value="data2.value"
+                       :placeholder="data2.placeholder"
+                       @select="selectData2"></auto-complete>
+</div>
+<script src="http://static.tcy365.com/cdn/jquery/2.1.0/jquery.js"></script>
+<script src="http://static.tcy365.com/cdn/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+<script src="/asset/double.bundle.js"></script>
+</body>
+</html>
