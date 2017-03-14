@@ -42,6 +42,11 @@ var a=new Vue({
         },
         reset:function(){
             this.value={};
+        },
+        setValue:function(){
+            this.value={
+                Id:1
+            }
         }
     }
 });
