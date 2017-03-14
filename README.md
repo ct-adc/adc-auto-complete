@@ -50,3 +50,6 @@ placeholder | 输入框的placeholder内容 | String | 输入内容后自动匹�
 注意：请保证按传入的value中的部分key值查找list只能匹配一项数据，否则匹配的数据可能并非预期；
 
 
+## changeLog
+
+[changeLog](https://github.com/ct-adc/adc-auto-complete/blob/master/changeLog.md)
