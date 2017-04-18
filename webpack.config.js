@@ -53,7 +53,8 @@ module.exports = {
   },
   devServer: {
     historyApiFallback: true,
-    noInfo: true
+    noInfo: true,
+      host:'192.168.7.19'
   },
   performance: {
     hints: false
