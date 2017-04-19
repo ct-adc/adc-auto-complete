@@ -4,9 +4,9 @@
             <input type="text" ref="input" class="form-control" v-model="input" @focus="focus"
                    :placeholder="placeholder"/>
             <template v-if="listVisible">
-                <ul class="dropdown-menu" v-show="matched.length>0">
+                <ul ref="list" class="dropdown-menu" v-show="matched.length>0">
                     <li v-for="item in matched"
-                        @click="select(item)">
+                        @click="select(item,$event)">
                         <a>
                         <span v-for="(key,index) in keys">
                             {{item[key]}}
@@ -15,7 +15,7 @@
                         </a>
                     </li>
                 </ul>
-                <ul class="dropdown-menu" v-show="matched.length===0">
+                <ul ref="list" class="dropdown-menu" v-show="matched.length===0">
                     <li class="noResult">{{info}}</li>
                 </ul>
             </template>
@@ -177,16 +177,26 @@
             focus(){
                 this.listVisible = true;
             },
-            select(item){
+            select(item,event){
+                event.stopPropagation();
                 var selectedItem=JSON.parse(JSON.stringify(item));
                 this.$emit('select', selectedItem);
                 this.selected=selectedItem;
                 this.$nextTick(function () {
                     this.input = this.selectedContent;
                 })
+                this.listVisible = false;
             },
             getValue(){
                 return JSON.parse(JSON.stringify(this.selected));
+            },
+            watchSelected(newVal,oldVal){
+                if(JSON.stringify(newVal) !== JSON.stringify(oldVal)){
+                    this.$emit('change-val',JSON.parse(JSON.stringify(this.selected)));
+                }
+                if(utility.base.isEmptyObject(newVal)){
+                    this.$emit('clear');
+                }
             }
         },
         watch:{
@@ -196,7 +206,7 @@
             list(){
                 this.initSelected();
             },
-            selected(newVal,oldVal){
+            selected:function(newVal,oldVal){
                 if(JSON.stringify(newVal) !== JSON.stringify(oldVal)){
                     this.$emit('change',JSON.parse(JSON.stringify(this.selected)));
                 }
