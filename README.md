@@ -1,5 +1,7 @@
 # 自动匹配组件
 
+## [在线demo](https://codepen.io/rubyisapm/pen/aWPXJX?editors=1010)
+
 ## 使用
 
 从npm安装`ct-adc-auto-complete`
