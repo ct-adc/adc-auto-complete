@@ -2,7 +2,7 @@
     <div class="autoComplete">
         <div class="dropdown">
             <input type="text" ref="input" class="form-control" v-model="input" @focus="focus"
-                   :placeholder="placeholder"/>
+                   :placeholder="placeholder" :disabled="disabled"/>
             <template v-if="listVisible">
                 <ul ref="list" class="dropdown-menu" v-show="matched.length>0">
                     <li v-for="item in matched"
@@ -64,6 +64,10 @@
             placeholder: {
                 type: String,
                 default: '输入内容后自动匹配...'
+            },
+            disabled:{
+                type:Boolean,
+                default:false
             }
         },
         data(){

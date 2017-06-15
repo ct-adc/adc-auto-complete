@@ -26,6 +26,7 @@ matchKeys | 可以参与匹配的属性 | Array | ['Id','Name']
 showKeys | 选择数据后显示在input中的属性 | Array | ['Id','Name']
 value | 当前选中的对象,可以不是完整的对象 | Object | 无
 placeholder | 输入框的placeholder内容 | String | 输入内容后自动匹配...
+disabled | 输入框是否可用 | Boolean | false
 
 
 ## 事件说明
