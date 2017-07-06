@@ -65,16 +65,16 @@
                 type: String,
                 default: '输入内容后自动匹配...'
             },
-            disabled:{
-                type:Boolean,
-                default:false
+            disabled: {
+                type: Boolean,
+                default: false
             }
         },
         data(){
             return {
                 input: '',
                 listVisible: false,
-                selected:{}
+                selected: {}
             }
         },
         created(){
@@ -91,8 +91,8 @@
             matched(){
                 var that = this;
                 if (that.input != '') {
-                    var matched = that.list.filter(function (item) {
-                        return that.matchKeys.some(function (key) {
+                    var matched = that.list.filter(function(item) {
+                        return that.matchKeys.some(function(key) {
                             return (item[key] + '').indexOf(that.input) > -1;
                         })
                     })
@@ -120,14 +120,14 @@
             selectedContent(){
                 var content = [];
                 var that = this;
-                that.showKeys.map(function (key) {
-                    if(typeof that.selected[key]!='undefined'){
+                that.showKeys.map(function(key) {
+                    if (typeof that.selected[key] != 'undefined') {
                         content.push(that.selected[key]);
                     }
                 })
-                if(content.length>0){
+                if (content.length > 0) {
                     return content.join('|');
-                }else{
+                } else {
                     return '';
                 }
             }
@@ -138,30 +138,30 @@
                 var value = that.value;
                 var valueKeysCount = Object.keys(value).length;
                 var listIsNotEmpty = that.list.length > 0;
-                var completed=false;
+                var completed = false;
                 if (valueKeysCount > 0 && listIsNotEmpty) {
                     var simpleKeysCount = Object.keys(that.list[0]).length;
                     var valueIsBroken = listIsNotEmpty && simpleKeysCount > valueKeysCount;
                     if (valueIsBroken) {
                         //当value相比list是不完整对象时，根据list修正这个对象
-                        var targetItems = that.list.filter(function (item) {
+                        var targetItems = that.list.filter(function(item) {
                             var keysInSelected = Object.keys(value);
-                            var matchItems = keysInSelected.filter(function (i) {
+                            var matchItems = keysInSelected.filter(function(i) {
                                 return value[i] === item[i];
                             })
                             return matchItems.length > 0;
                         });
                         if (targetItems.length > 0) {
-                            completed=true;
+                            completed = true;
                         }
                     }
                 }
-                if(completed){
-                    this.selected=targetItems[0];
-                }else{
-                    this.selected=that.value;
+                if (completed) {
+                    this.selected = targetItems[0];
+                } else {
+                    this.selected = that.value;
                 }
-                that.$nextTick(function () {
+                that.$nextTick(function() {
                     that.input = that.selectedContent;
                 })
             },
@@ -173,20 +173,20 @@
                     }
                     if (that.input !== '') {
                         that.input = that.selectedContent;
-                    }else{
-                        that.selected={};
+                    } else {
+                        that.selected = {};
                     }
                 }
             },
             focus(){
                 this.listVisible = true;
             },
-            select(item,event){
+            select(item, event){
                 event.stopPropagation();
-                var selectedItem=JSON.parse(JSON.stringify(item));
+                var selectedItem = JSON.parse(JSON.stringify(item));
                 this.$emit('select', selectedItem);
-                this.selected=selectedItem;
-                this.$nextTick(function () {
+                this.selected = selectedItem;
+                this.$nextTick(function() {
                     this.input = this.selectedContent;
                 })
                 this.listVisible = false;
@@ -194,28 +194,33 @@
             getValue(){
                 return JSON.parse(JSON.stringify(this.selected));
             },
-            watchSelected(newVal,oldVal){
-                if(JSON.stringify(newVal) !== JSON.stringify(oldVal)){
-                    this.$emit('change-val',JSON.parse(JSON.stringify(this.selected)));
+            watchSelected(newVal, oldVal){
+                if (JSON.stringify(newVal) !== JSON.stringify(oldVal)) {
+                    this.$emit('change-val', JSON.parse(JSON.stringify(this.selected)));
                 }
-                if(utility.base.isEmptyObject(newVal)){
+                if (utility.base.isEmptyObject(newVal)) {
                     this.$emit('clear');
                 }
             }
         },
-        watch:{
+        watch: {
             value(){
                 this.initSelected();
             },
             list(){
                 this.initSelected();
             },
-            selected:function(newVal,oldVal){
-                if(JSON.stringify(newVal) !== JSON.stringify(oldVal)){
-                    this.$emit('change',JSON.parse(JSON.stringify(this.selected)));
+            selected: function(newVal, oldVal) {
+                if (JSON.stringify(newVal) !== JSON.stringify(oldVal)) {
+                    this.$emit('change', JSON.parse(JSON.stringify(this.selected)));
                 }
-                if(utility.base.isEmptyObject(newVal)){
+                if (utility.base.isEmptyObject(newVal)) {
                     this.$emit('clear');
+                }
+            },
+            input(newVal){
+                if (newVal === '') {
+                    this.selected = {};
                 }
             }
         }

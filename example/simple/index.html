@@ -8,18 +8,23 @@
   </head>
   <body>
       <div id="app">
-        <auto-complete :list="list"
-                       :keys="keys"
-                       :match-keys="matchKeys"
-                       :show-keys="showKeys"
-                       :all-for-empty="allForEmpty"
-                       :value="value"
-                       :placeholder="placeholder"
-                       @change-val="select" ref="autoC" disabled></auto-complete>
-
-          <button type="button" class="btn btn-default" @click="getValue">get value</button>
-          <button type="button" class="btn btn-default" @click="setValue">set value</button>
-          <button type="button" class="btn btn-default" @click="reset">重置</button>
+          <div class="row">
+              <div class="col-sm-5">
+                  <auto-complete :list="list"
+                                 :keys="keys"
+                                 :match-keys="matchKeys"
+                                 :show-keys="showKeys"
+                                 :all-for-empty="allForEmpty"
+                                 :value="value"
+                                 :placeholder="placeholder"
+                                 @change-val="select" ref="autoC"></auto-complete>
+              </div>
+              <div class="col-sm-5">
+                  <button type="button" class="btn btn-default" @click="getValue">get value</button>
+                  <button type="button" class="btn btn-default" @click="setValue">set value</button>
+                  <button type="button" class="btn btn-default" @click="reset">重置</button>
+              </div>
+          </div>
       </div>
 
 
