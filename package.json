@@ -1,7 +1,7 @@
 {
   "name": "ct-adc-auto-complete",
   "description": "vue component",
-  "version": "2.0.0",
+  "version": "1.3.2",
   "author": "ruby",
   "private": false,
   "scripts": {
