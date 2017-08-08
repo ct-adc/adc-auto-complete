@@ -1,8 +1,9 @@
 <template>
     <div class="autoComplete">
         <div class="dropdown">
-            <input type="text" ref="input" class="form-control" v-model="input" @focus="focus"
+            <input type="text" autocomplete="off" ref="input" class="form-control has-feedback" v-model="input" @focus="focus"
                    :placeholder="placeholder" :disabled="disabled"/>
+            <span class="glyphicon glyphicon-remove form-control-feedback text-muted" @click="empty"></span>
             <template v-if="listVisible">
                 <ul ref="list" class="dropdown-menu" v-show="matched.length>0">
                     <li v-for="item in matched"
@@ -126,7 +127,11 @@
                     }
                 })
                 if (content.length > 0) {
+<<<<<<< HEAD
                     return content.join('|');
+=======
+                    return content.join(' | ');
+>>>>>>> dev
                 } else {
                     return '';
                 }
@@ -201,6 +206,9 @@
                 if (utility.base.isEmptyObject(newVal)) {
                     this.$emit('clear');
                 }
+            },
+            empty(){
+                this.input = '';
             }
         },
         watch: {
@@ -210,10 +218,22 @@
             list(){
                 this.initSelected();
             },
+<<<<<<< HEAD
             selected: function(newVal, oldVal) {
                 if (JSON.stringify(newVal) !== JSON.stringify(oldVal)) {
                     this.$emit('change', JSON.parse(JSON.stringify(this.selected)));
                 }
+=======
+            input(newVal){
+                if (newVal === '') {
+                    this.selected = {};
+                }
+            },
+            selected: function(newVal, oldVal) {
+                if (JSON.stringify(newVal) !== JSON.stringify(oldVal)) {
+                    this.$emit('change', JSON.parse(JSON.stringify(this.selected)));
+                }
+>>>>>>> dev
                 if (utility.base.isEmptyObject(newVal)) {
                     this.$emit('clear');
                 }
@@ -240,5 +260,15 @@
 
     .autoComplete .noResult {
         padding: 3px 20px;
+    }
+    .form-control-feedback {
+        cursor: pointer;
+        pointer-events: inherit;
+    }
+    .has-feedback {
+        padding-right: 25px;
+    }
+    .has-feedback::-ms-clear {
+        display: none;
     }
 </style>

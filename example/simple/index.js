@@ -45,6 +45,9 @@ var a=new Vue({
         },
         setValue:function(){
             this.value={Id:1}
+        },
+        change:function(item){
+            console.log(JSON.stringify(item));
         }
     }
 });
