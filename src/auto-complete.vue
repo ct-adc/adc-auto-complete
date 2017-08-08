@@ -1,7 +1,7 @@
 <template>
     <div class="autoComplete">
         <div class="dropdown">
-            <input type="text" ref="input" class="form-control has-feedback" v-model="input" @focus="focus"
+            <input type="text" autocomplete="off" ref="input" class="form-control has-feedback" v-model="input" @focus="focus"
                    :placeholder="placeholder" :disabled="disabled"/>
             <span class="glyphicon glyphicon-remove form-control-feedback text-muted" @click="empty"></span>
             <template v-if="listVisible">
