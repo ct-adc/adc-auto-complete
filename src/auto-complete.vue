@@ -127,11 +127,7 @@
                     }
                 })
                 if (content.length > 0) {
-<<<<<<< HEAD
-                    return content.join('|');
-=======
                     return content.join(' | ');
->>>>>>> dev
                 } else {
                     return '';
                 }
@@ -218,22 +214,10 @@
             list(){
                 this.initSelected();
             },
-<<<<<<< HEAD
             selected: function(newVal, oldVal) {
                 if (JSON.stringify(newVal) !== JSON.stringify(oldVal)) {
                     this.$emit('change', JSON.parse(JSON.stringify(this.selected)));
                 }
-=======
-            input(newVal){
-                if (newVal === '') {
-                    this.selected = {};
-                }
-            },
-            selected: function(newVal, oldVal) {
-                if (JSON.stringify(newVal) !== JSON.stringify(oldVal)) {
-                    this.$emit('change', JSON.parse(JSON.stringify(this.selected)));
-                }
->>>>>>> dev
                 if (utility.base.isEmptyObject(newVal)) {
                     this.$emit('clear');
                 }
@@ -244,7 +228,7 @@
                 }
             }
         }
-    };
+    }
 </script>
 <style scoped>
     .autoComplete .dropdown-menu {
