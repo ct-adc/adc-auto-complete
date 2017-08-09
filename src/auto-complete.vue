@@ -2,7 +2,7 @@
     <div class="autoComplete">
         <div class="dropdown">
             <input type="text" autocomplete="off" ref="input" class="form-control has-feedback" v-model="input" @focus="focus"
-                   :placeholder="placeholder" :disabled="disabled"/>
+                   :placeholder="placeholder" :disabled="disabled" :maxlength="maxlength"/>
             <span class="glyphicon glyphicon-remove form-control-feedback text-muted" @click="empty"></span>
             <template v-if="listVisible">
                 <ul ref="list" class="dropdown-menu" v-show="matched.length>0">
@@ -69,6 +69,10 @@
             disabled: {
                 type: Boolean,
                 default: false
+            },
+            maxlength:{
+                type:Number,
+                default:100000
             }
         },
         data(){
