@@ -20,6 +20,9 @@ var list=[
     },{
         Id:'',
         Name:'空值'
+    },{
+        Id:'case insensitive',
+        Name:'abs'
     }
 ];
 var a=new Vue({

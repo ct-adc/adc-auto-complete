@@ -70,6 +70,10 @@
                 type: Boolean,
                 default: false
             },
+            caseInsensitive:{
+                type: Boolean,
+                default: false
+            },
             maxlength:{
                 type:Number,
                 default:100000
@@ -98,7 +102,17 @@
                 if (that.input != '') {
                     var matched = that.list.filter(function(item) {
                         return that.matchKeys.some(function(key) {
-                            return (item[key] + '').indexOf(that.input) > -1;
+                            if(that.caseInsensitive){
+                                var itemKeyLowerCased=(item[key] + '').replace(/([a-zA-Z])/g,($0,$1)=>{
+                                    return $1.toLowerCase();
+                                });
+                                var inputLowerCased=that.input.replace(/([a-zA-Z])/g,($0,$1)=>{
+                                    return $1.toLowerCase();
+                                });
+                                return itemKeyLowerCased.indexOf(inputLowerCased) > -1;
+                            }else{
+                                return (item[key] + '').indexOf(that.input) > -1;
+                            }
                         })
                     })
                     if (matched.length > 0) {
