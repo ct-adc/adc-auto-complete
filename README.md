@@ -29,6 +29,16 @@ placeholder | 输入框的placeholder内容 | String | 输入内容后自动匹�
 disabled | 输入框是否可用 | Boolean | false
 maxlength | 输入框输入字数限制 | Number | 100000
 caseInsensitive | 是否大小写不敏感，默认区分大小写 | Boolean | false
+autoClear | 是否在不匹配时自动清空input | Boolean | false
+autoSelectIfOne | 是否在只有一项匹配时自动选中该项 | Boolean | false
+
+
+## 方法说明
+
+* getValue
+
+当autoClear为false时，返回对象或者字符串类型(当无法匹配到任何数据时);
+当autoClear为true时，返回对象;
 
 ## 事件说明
 
@@ -53,7 +63,8 @@ caseInsensitive | 是否大小写不敏感，默认区分大小写 | Boolean | f
 
 2. value可不可以不包含全部的key？
 
-可以，但value必须是对象。
+* 当autoClear为false时，value可以为string类型，指定input中的内容。
+* 当autoClear为true时，value必须是对象。此时用户操作结果只能是list列表中指定的内容，value的内容可以被自动补全。
 例如业务中编辑操作时，只给出了编辑项的Id值，但是其他的如name/shortName之类的并没有给全,组件会根据源数据list来算出匹配的完整数据；
 
 注意：请保证按传入的value中的部分key值查找list只能匹配一项数据，否则匹配的数据可能并非预期；
