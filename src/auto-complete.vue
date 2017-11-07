@@ -8,8 +8,10 @@
                    v-model="input"
                    @focus="focus"
                    @keyup="showList"
+                   @keydown.enter="hideList"
                    @keyup.enter="hideList"
                    :placeholder="placeholder" :disabled="disabled" :maxlength="maxlength"/>
+            <!-- 之所以加入keydown.enter是为了保证回车按下时如果autoselectIfOne为true时能够第一时间获取最终结果，避免回车触发的搜索在获取最终结果之前搜索，此时该条件不能及时更新-->
             <span class="glyphicon glyphicon-remove form-control-feedback text-muted" @click="empty"></span>
             <template v-if="listVisible">
                 <ul ref="list" class="dropdown-menu" v-show="matched.length>0">
@@ -98,7 +100,8 @@
             return {
                 input: '',
                 listVisible: false,
-                selected: {}
+                selected: {},
+                focusFlag: false
             }
         },
         created(){
@@ -114,7 +117,7 @@
         computed: {
             matched(){
                 var that = this;
-                if (that.input != '') {
+                if (that.input != '' && !this.focusFlag) {
                     var matched = that.list.filter(function(item) {
                         return that.matchKeys.some(function(key) {
                             if(that.caseInsensitive){
@@ -131,9 +134,6 @@
                         })
                     })
                     if (matched.length > 0) {
-                        if(this.autoSelectIfOne && matched.length===1){
-                            this.selected=matched[0];
-                        }
                         return matched;
                     } else if (that.selectedContent.indexOf(this.input) > -1 && !utility.base.isEmptyObject(that.selected)) {
                         return [that.selected];
@@ -143,7 +143,7 @@
                         }
                         return [];
                     }
-                } else if (that.allForEmpty) {
+                } else if (this.focusFlag || that.allForEmpty) {
                     return that.list;
                 } else {
                     return [];
@@ -226,6 +226,9 @@
                         that.listVisible = false;
                     }
                     if (that.input !== '') {
+                        if(this.autoSelectIfOne && this.matched.length===1){
+                            this.selected=this.matched[0];
+                        }
                         that.input = that.selectedContent;
                     } else {
                         that.selected = {};
@@ -234,6 +237,7 @@
             },
             focus(){
                 this.listVisible = true;
+                this.focusFlag = true;
             },
             select(item, event){
                 event.stopPropagation();
@@ -264,10 +268,18 @@
                 this.input = '';
             },
             showList(){
+                this.focusFlag = false;
                 this.listVisible=true;
             },
             hideList(){
                 this.listVisible=false;
+                if(this.autoSelectIfOne && this.matched.length===1){
+                    this.selected=this.matched[0];
+                    this.$nextTick(()=>{
+                        this.input=this.selectedContent;
+                    });
+                }
+                this.focusFlag = false;
             }
         },
         watch: {
