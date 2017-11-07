@@ -4,37 +4,53 @@
     <meta charset="utf-8">
     <title>adc</title>
     <link href="http://static.tcy365.com/cdn/bootstrap/3.3.7/custom/1.0.0/css/bootstrap.css" rel="stylesheet">
-</head>
-<body>
-<div id="app">
-    <div class="row mt20">
-        <div class="col-sm-offset-2 col-sm-5">
-            <auto-complete :list="list"
-                           :keys="keys"
-                           :match-keys="matchKeys"
-                           :show-keys="showKeys"
-                           :all-for-empty="allForEmpty"
-                           :value="value"
-                           :placeholder="placeholder"
-                           :maxlength="10"
-                           case-insensitive
-                           @change="change"
-                           @change-val="select" ref="autoC"></auto-complete>
-        </div>
-        <div class="col-sm-5">
-            <button type="button" class="btn btn-default" @click="getValue">get value</button>
-            <button type="button" class="btn btn-default" @click="setValue">set value</button>
-            <button type="button" class="btn btn-default" @click="reset">重置</button>
-        </div>
-    </div>
-
-
-
-</div>
-
-
-<script src="http://static.tcy365.com/cdn/jquery/2.1.0/jquery.js"></script>
-<script src="http://static.tcy365.com/cdn/bootstrap/3.3.5/js/bootstrap.min.js"></script>
-<script src="/asset/simple.bundle.js"></script>
-</body>
+  </head>
+  <body>
+      <div id="app">
+          <div class="well well-sm clearfix">
+              <form action="javascript:;" class="form-horizontal form-horizontal-sm">
+                  <div class="col-lg-11 col-sm-11 text-nowrap">
+                      <div class="col-lg-3 col-sm-4">
+                         <div class="form-group form-group-sm">
+                             <label class="col-sm-4 control-label">不匹配时不清空</label>
+                             <div class="col-sm-8">
+                                 <auto-complete :list="list"
+                                                :keys="keys"
+                                                :match-keys="matchKeys"
+                                                :show-keys="showKeys"
+                                                :all-for-empty="allForEmpty"
+                                                :value="value"
+                                                :placeholder="placeholder"
+                                                :maxlength="10"
+                                                auto-clear
+                                                case-insensitive
+                                                auto-select-if-one
+                                                @change="change"
+                                                @change-val="select" ref="autoC"></auto-complete>
+                             </div>
+                         </div>
+                      </div>
+                  </div>
+                  <div class="col-lg-1 col-sm-1 text-right">
+                      <div class="form-group form-group-sm">
+                          <button type="submit" class="btn btn-sm btn-primary" @click="search">
+                              <i class="glyphicon glyphicon-search"></i>
+                              <i class="glyphicon glyphicon-refresh rotate"></i>
+                              搜索
+                          </button>
+                      </div>
+                  </div>
+              </form>
+          </div>
+          <div class="col-sm-5">
+              <button type="button" class="btn btn-default" @click="getValue">get value</button>
+              <button type="button" class="btn btn-default" @click="setValue">set value</button>
+              <button type="button" class="btn btn-default" @click="setValueToString">set value to string</button>
+              <button type="button" class="btn btn-default" @click="reset">重置</button>
+          </div>
+      </div>
+    <script src="http://static.tcy365.com/cdn/jquery/2.1.0/jquery.js"></script>
+    <script src="http://static.tcy365.com/cdn/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+    <script src="/asset/simple.bundle.js"></script>
+  </body>
 </html>
