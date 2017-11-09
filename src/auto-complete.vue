@@ -279,6 +279,9 @@
                         this.input=this.selectedContent;
                     });
                 }
+                if(this.autoClear){
+                    this.input=this.selectedContent;
+                }
                 this.focusFlag = false;
             }
         },
