@@ -1,5 +1,11 @@
 ## 更新日志
 
+### 2.0.2
+
+*2017-11-09*
+
+- 修复 当点击回车时，autoClear为true则同步input=this.selectedContent
+
 ### 2.0.1
 
 *2017-11-07*
