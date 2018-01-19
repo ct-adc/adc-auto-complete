@@ -34,7 +34,7 @@
 </template>
 <script type="text/ecmascript-6">
     import utility from 'ct-utility';
-    export default{
+    export default {
         name: 'auto-complete',
         props: {
             allForEmpty: {
@@ -43,31 +43,31 @@
             },
             list: {
                 type: [Array],
-                default(){
-                    return []
+                default() {
+                    return [];
                 }
             },
             keys: {
                 type: Array,
-                default(){
+                default() {
                     return ['Id', 'Name'];
                 }
             },
             matchKeys: {
                 type: Array,
-                default(){
+                default() {
                     return ['Id', 'Name'];
                 }
             },
             showKeys: {
                 type: Array,
-                default(){
+                default() {
                     return ['Id', 'Name'];
                 }
             },
             value: {
-                type: [Object,String],
-                default(){
+                type: [Object, String],
+                default() {
                     return {};
                 }
             },
@@ -79,126 +79,130 @@
                 type: Boolean,
                 default: false
             },
-            caseInsensitive:{
+            caseInsensitive: {
                 type: Boolean,
                 default: false
             },
-            maxlength:{
-                type:Number,
-                default:100000
+            maxlength: {
+                type: Number,
+                default: 100000
             },
-            autoClear:{
-                type:Boolean,
-                default:false
+            autoClear: {
+                type: Boolean,
+                default: false
             },
-            autoSelectIfOne:{
-                type:Boolean,
-                default:false
+            autoSelectIfOne: {
+                type: Boolean,
+                default: false
             }
         },
-        data(){
+        data() {
             return {
                 input: '',
                 listVisible: false,
                 selected: {},
                 focusFlag: false
-            }
+            };
         },
-        created(){
+        created() {
             this.initSelected();
         },
-        mounted(){
+        mounted() {
             this.input = this.selectedContent;
             window.addEventListener('click', this.clickHandler);
         },
-        beforeDestroy(){
+        beforeDestroy() {
             window.removeEventListener('click', this.clickHandler);
         },
         computed: {
-            matched(){
-                var that = this;
-                if (that.input != '' && !this.focusFlag) {
-                    var matched = that.list.filter(function(item) {
+            matched() {
+                const that = this;
+
+                if (that.input !== '' && !this.focusFlag) {
+                    const matched = that.list.filter(function(item) {
                         return that.matchKeys.some(function(key) {
-                            if(that.caseInsensitive){
-                                var itemKeyLowerCased=(item[key] + '').replace(/([a-zA-Z])/g,($0,$1)=>{
+                            if (that.caseInsensitive) {
+                                const itemKeyLowerCased = (item[key] + '').replace(/([a-zA-Z])/g, ($0, $1) => {
                                     return $1.toLowerCase();
                                 });
-                                var inputLowerCased=that.input.replace(/([a-zA-Z])/g,($0,$1)=>{
+                                const inputLowerCased = that.input.replace(/([a-zA-Z])/g, ($0, $1) => {
                                     return $1.toLowerCase();
                                 });
+
                                 return itemKeyLowerCased.indexOf(inputLowerCased) > -1;
-                            }else{
-                                return (item[key] + '').indexOf(that.input) > -1;
                             }
-                        })
-                    })
+                            return (item[key] + '').indexOf(that.input) > -1;
+                        });
+                    });
+
                     if (matched.length > 0) {
                         return matched;
                     } else if (that.selectedContent.indexOf(this.input) > -1 && !utility.base.isEmptyObject(that.selected)) {
                         return [that.selected];
-                    } else {
-                        if(this.autoSelectIfOne){
-                            this.selected={};
-                        }
-                        return [];
                     }
+                    if (this.autoSelectIfOne) {
+                        this.selected = {};
+                    }
+                    return [];
                 } else if (this.focusFlag || that.allForEmpty) {
                     return that.list;
-                } else {
-                    return [];
                 }
+                return [];
             },
-            info(){
+            info() {
                 if (this.matched.length !== 0) return;
                 if (this.input === '' && !this.allForEmpty) {
                     return '请输入内容进行匹配！';
-                } else {
-                    return '没有匹配的内容！';
                 }
+                return '没有匹配的内容！';
             },
-            selectedContent(){
-                var content = [];
-                var that = this;
+            selectedContent() {
+                const content = [];
+                const that = this;
+
                 that.showKeys.map(function(key) {
-                    if (typeof that.selected[key] != 'undefined') {
+                    if (typeof that.selected[key] !== 'undefined') {
                         content.push(that.selected[key]);
                     }
-                })
+                });
                 if (content.length > 0) {
                     return content.join(' | ');
-                } else {
-                    if(that.autoClear){
-                        return '';
-                    }else{
-                        return that.input;
-                    }
                 }
+                if (that.autoClear) {
+                    return '';
+                }
+                return that.input;
             }
         },
         methods: {
-            initSelected(){
-                var that = this;
-                var value = that.value;
-                if(typeof value ==='string'){
-                    this.input=value;
-                    this.selected={};
-                }else if(typeof value === 'object'){
-                    var valueKeysCount = Object.keys(value).length;
-                    var listIsNotEmpty = that.list.length > 0;
-                    var completed = false;
+            initSelected() {
+                const that = this;
+                const value = that.value;
+
+                if (typeof value === 'string') {
+                    this.input = value;
+                    this.selected = {};
+                } else if (typeof value === 'object') {
+                    const valueKeysCount = Object.keys(value).length;
+                    const listIsNotEmpty = that.list.length > 0;
+                    let completed = false;
+                    let targetItems;
+
                     if (valueKeysCount > 0 && listIsNotEmpty) {
-                        var simpleKeysCount = Object.keys(that.list[0]).length;
-                        var valueIsBroken = listIsNotEmpty && simpleKeysCount > valueKeysCount;
+                        const simpleKeysCount = Object.keys(that.list[0]).length;
+                        const valueIsBroken = listIsNotEmpty && simpleKeysCount > valueKeysCount;
+
                         if (valueIsBroken) {
                             //当value相比list是不完整对象时，根据list修正这个对象
-                            var targetItems = that.list.filter(function(item) {
-                                var keysInSelected = Object.keys(value);
-                                var matchItems = keysInSelected.filter(function(i) {
+                            targetItems = that.list.filter(function(item) {
+                                const keysInSelected = Object.keys(value);
+                                const matchItems = keysInSelected.filter(function(i) {
                                     return value[i] === item[i];
-                                })
+                                });
+
                                 return matchItems.length > 0;
                             });
+
                             if (targetItems.length > 0) {
                                 completed = true;
                             }
@@ -210,24 +214,24 @@
                         this.selected = that.value;
                     }
                     that.$nextTick(function() {
-                        if(JSON.stringify(this.selected)==='{}'){
-                            that.input='';
-                        }else{
+                        if (JSON.stringify(this.selected) === '{}') {
+                            that.input = '';
+                        } else {
                             that.input = that.selectedContent;
                         }
-                    })
+                    });
                 }
-
             },
-            clickHandler(event){
-                var that = this;
+            clickHandler(event) {
+                const that = this;
+
                 if (that.listVisible) {
-                    if (event.target != that.$refs.input) {
+                    if (event.target !== that.$refs.input) {
                         that.listVisible = false;
                     }
                     if (that.input !== '') {
-                        if(this.autoSelectIfOne && this.matched.length===1){
-                            this.selected=this.matched[0];
+                        if (this.autoSelectIfOne && this.matched.length === 1) {
+                            this.selected = this.matched[0];
                         }
                         that.input = that.selectedContent;
                     } else {
@@ -235,28 +239,28 @@
                     }
                 }
             },
-            focus(){
+            focus() {
                 this.listVisible = true;
                 this.focusFlag = true;
             },
-            select(item, event){
+            select(item, event) {
                 event.stopPropagation();
-                var selectedItem = JSON.parse(JSON.stringify(item));
+                const selectedItem = JSON.parse(JSON.stringify(item));
+
                 this.$emit('select', selectedItem);
                 this.selected = selectedItem;
                 this.$nextTick(function() {
                     this.input = this.selectedContent;
-                })
+                });
                 this.listVisible = false;
             },
-            getValue(){
-                if(!this.autoClear && JSON.stringify(this.selected)==='{}'){
+            getValue() {
+                if (!this.autoClear && JSON.stringify(this.selected) === '{}') {
                     return this.input;
-                }else{
-                    return JSON.parse(JSON.stringify(this.selected));
                 }
+                return JSON.parse(JSON.stringify(this.selected));
             },
-            watchSelected(newVal, oldVal){
+            watchSelected(newVal, oldVal) {
                 if (JSON.stringify(newVal) !== JSON.stringify(oldVal)) {
                     this.$emit('change-val', JSON.parse(JSON.stringify(this.selected)));
                 }
@@ -264,35 +268,35 @@
                     this.$emit('clear');
                 }
             },
-            empty(){
+            empty() {
                 this.input = '';
             },
-            showList(){
+            showList() {
                 this.focusFlag = false;
-                this.listVisible=true;
+                this.listVisible = true;
             },
-            hideList(){
-                this.listVisible=false;
-                if(this.autoSelectIfOne && this.matched.length===1){
-                    this.selected=this.matched[0];
-                    this.$nextTick(()=>{
-                        this.input=this.selectedContent;
+            hideList() {
+                this.listVisible = false;
+                if (this.autoSelectIfOne && this.matched.length === 1) {
+                    this.selected = this.matched[0];
+                    this.$nextTick(() => {
+                        this.input = this.selectedContent;
                     });
                 }
-                if(this.autoClear){
-                    this.input=this.selectedContent;
+                if (this.autoClear) {
+                    this.input = this.selectedContent;
                 }
                 this.focusFlag = false;
             }
         },
         watch: {
-            value(){
+            value() {
                 this.initSelected();
             },
-            list(){
+            list() {
                 this.initSelected();
             },
-            input(newVal){
+            input(newVal) {
                 if (newVal === '') {
                     this.selected = {};
                 }
@@ -323,13 +327,16 @@
     .autoComplete .noResult {
         padding: 3px 20px;
     }
+
     .form-control-feedback {
         cursor: pointer;
         pointer-events: inherit;
     }
+
     .has-feedback {
         padding-right: 25px;
     }
+
     .has-feedback::-ms-clear {
         display: none;
     }
