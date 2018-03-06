@@ -22,10 +22,11 @@
                                            :value="value"
                                            :placeholder="placeholder"
                                            :maxlength="10"
+                                           disabled
                                            auto-clear
                                            case-insensitive
                                            auto-select-if-one
-                                           @change="change"
+                                           @change="change(arguments, 1)"
                                            @change-val="select" ref="autoC"></auto-complete>
                         </div>
                     </div>

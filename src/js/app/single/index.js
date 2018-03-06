@@ -31,7 +31,7 @@ const a = new Vue({
         matchKeys: ['Id', 'Name'],
         showKeys: ['Id', 'Name'],
         allForEmpty: true,
-        value: {Id: 1},
+        value: {},
         placeholder: '请选择游戏'
     },
     methods: {
@@ -50,8 +50,8 @@ const a = new Vue({
         setValueToString: function() {
             this.value = 'ruby';
         },
-        change: function(item) {
-            console.log(JSON.stringify(item));
+        change: function(item, index) {
+            console.log(...item, index);
         },
         search: function() {
             console.log('search');
