@@ -110,6 +110,10 @@ clear | 数据被清空 | 无 | 无 | 当组件中的值被清空（手动清空
 
    注意：请保证按传入的value中的部分key值查找list只能匹配一项数据，否则匹配的数据可能并非预期；
 
+3. value中是否可以含有list中没有的key？
+
+   不可以
+   
 ## 更新日志
 
 [更新日志](https://github.com/ct-adc/adc-auto-complete/blob/master/changeLog.md)

@@ -31,7 +31,7 @@ const a = new Vue({
         matchKeys: ['Id', 'Name'],
         showKeys: ['Id', 'Name'],
         allForEmpty: true,
-        value: {},
+        value: {Id: 3},
         placeholder: '请选择游戏'
     },
     methods: {
