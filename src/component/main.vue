@@ -51,11 +51,12 @@
     const getMatchListByBrokenValue = function(value, list){
         const matchList = list.filter(item=>{
             const keysInSelected = Object.keys(value);
-            const matchItems = keysInSelected.filter(i=>{
+//            list中如果存在一项，针对每一个value中的key，都能和其完全相等，那么这一项就是匹配的项
+            const totallyMatched = keysInSelected.every(i=>{
                 return value[i] === item[i];
             });
 
-            return matchItems.length > 0;
+            return totallyMatched;
         });
 
         return matchList;
