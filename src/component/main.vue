@@ -17,10 +17,10 @@
             <span v-if="!disabled" class="glyphicon glyphicon-remove form-control-feedback text-muted" @click="empty"></span>
             <template v-if="listVisible">
                 <ul ref="list" class="dropdown-menu" v-show="matched.length>0">
-                    <li v-for="item in matched"
-                        @click="select(item,$event)">
+                    <li v-for="(item, index) in matched"
+                        @click="select(item,$event)" :key="index">
                         <a>
-                        <span v-for="(key,index) in keys">
+                        <span v-for="(key,index) in keys" :key="index">
                             {{item[key]}}
                             <span v-if="index!=keys.length-1">|</span>
                         </span>
@@ -36,99 +36,96 @@
 </template>
 <script>
     import utility from 'ct-utility';
-    const isValueBroken = function(value, list){
-        const valueKeysCount = Object.keys(value).length;
-        const listIsNotEmpty = list.length > 0;
-
-        if (valueKeysCount > 0 && listIsNotEmpty) {
-            const simpleKeysCount = Object.keys(list[0]).length;
-            const valueIsBroken = listIsNotEmpty && simpleKeysCount > valueKeysCount;
-
-            return valueIsBroken;
-        }
-        return false;
-    };
-    const getMatchListByBrokenValue = function(value, list){
-        const matchList = list.filter(item=>{
-            const keysInSelected = Object.keys(value);
-//            list中如果存在一项，针对每一个value中的key，都能和其完全相等，那么这一项就是匹配的项
-            const totallyMatched = keysInSelected.every(i=>{
-                return value[i] === item[i];
-            });
-
-            return totallyMatched;
-        });
-
-        return matchList;
-    };
+    import {isValueBroken, getMatchListByBrokenValue, matchAtLeastOneKey} from './module/util';
 
     export default {
         name: 'auto-complete',
+        model: {
+            prop: 'value',
+            event: 'change'
+        },
         props: {
             allForEmpty: {
+                // 当为空时显示全部内容
                 type: Boolean,
                 default: true
             },
             list: {
+                // 源数据
                 type: [Array],
                 default() {
                     return [];
                 }
             },
             keys: {
+                // 需要显示到list中的key
                 type: Array,
                 default() {
                     return ['Id', 'Name'];
                 }
             },
             matchKeys: {
+                // 可以参与匹配的key
                 type: Array,
                 default() {
                     return ['Id', 'Name'];
                 }
             },
             showKeys: {
+                // 需要显示到input框中的key
                 type: Array,
                 default() {
                     return ['Id', 'Name'];
                 }
             },
             value: {
+                // 选中的项或input中的值
                 type: [Object, String],
                 default() {
                     return {};
                 }
             },
             placeholder: {
+                // 输入框中的placeholder
                 type: String,
                 default: '输入内容后自动匹配...'
             },
             disabled: {
+                // 是否禁用input框
                 type: Boolean,
                 default: false
             },
-            caseInsensitive: {
+            caseSensitive: {
+                // 匹配时是否大小写敏感
                 type: Boolean,
                 default: false
             },
             maxlength: {
+                // 允许输入的最大长度
                 type: Number,
                 default: 100000
             },
             autoClear: {
+                // 没有匹配到内容时是否清空
                 type: Boolean,
                 default: false
             },
             autoSelectIfOne: {
+                // 当只有一项匹配时自动选择该项
+                type: Boolean,
+                default: false
+            },
+            sticky: {
+                // 当选择一项后，如果删除input中的部分内容，但没有完全删除，是否需要恢复到原来的值
                 type: Boolean,
                 default: false
             }
         },
         data() {
             return {
-                input: '',
-                listVisible: false,
-                selected: {},
+                input: '', // input框中的内容
+                listVisible: false, // 下拉框是否可见
+                selected: {}, // 选中的项
                 focusFlag: false // 当发生focus事件时设置该flag为true
             };
         },
@@ -148,38 +145,28 @@
              * @returns {*}
              */
             matched() {
-                if (this.input !== '' && !this.focusFlag) {
+                const shouldFilterByInput = this.input !== '' && !this.focusFlag;
+                const shouldReturnWholeList = this.focusFlag || this.allForEmpty;
+
+                if (shouldFilterByInput) {
 //                    input即使有值，如果用户点击input获取焦点时，需忽略input内容并将全部内容显示出来
                     const matched = this.list.filter(item=>{
-                        const matchAtLeastOneMatchKey = this.matchKeys.some(key=>{
-                            if (this.caseInsensitive) {
-                                const itemKeyLowerCased = (item[key] + '').replace(/([a-zA-Z])/g, ($0, $1) => {
-                                    return $1.toLowerCase();
-                                });
-                                const inputLowerCased = this.input.replace(/([a-zA-Z])/g, ($0, $1) => {
-                                    return $1.toLowerCase();
-                                });
-
-                                return itemKeyLowerCased.indexOf(inputLowerCased) > -1;
-                            }
-                            return (item[key] + '').indexOf(this.input) > -1;
-                        });
-
-                        return matchAtLeastOneMatchKey;
+                        return matchAtLeastOneKey(item, this.input, this.matchKeys, this.caseSensitive);
                     });
-
+                    const shouldReverseSelected = this.selectedContent.indexOf(this.input) > -1 && !utility.base.isEmptyObject(this.selected) && this.sticky;
+//                        如果当前的结果不是空时，用户只是删除了当前结果的部分input内容，但没有全部删除完（全部删除完时会触发this.selected={}），那么匹配列表中应该包含this.selected这条数据
+                   
                     if (matched.length > 0) {
                         return matched;
-                    } else if (this.selectedContent.indexOf(this.input) > -1 && !utility.base.isEmptyObject(this.selected)) {
-//                        如果当前的结果不是空时，用户只是删除了当前结果的部分input内容，但没有全部删除完（全部删除完时会触发this.selected={}），那么匹配列表中应该包含this.selected这条数据
+                    } else if (shouldReverseSelected) {
                         return [this.selected];
                     }
-//                    如果没有匹配出任何数据，且
+//                    如果没有匹配出任何数据
                     if (this.autoSelectIfOne) {
                         this.selected = {};
                     }
                     return [];
-                } else if (this.focusFlag || this.allForEmpty) {
+                } else if (shouldReturnWholeList) {
                     return this.list;
                 }
                 return [];
@@ -197,7 +184,7 @@
             },
             /**
              * selectedContent: 根据当前的数据选择和用户输入情况，计算出的input中应该展示出的内容，大部分情况下input可以选择使用该值
-             * @returns {*}
+             * @returns { * }
              */
             selectedContent() {
                 const content = [];
@@ -247,7 +234,7 @@
                     } else {
                         this.selected = this.value;
                     }
-//                    TODO
+//                    修正好selected对象后，更新input的值，以便及时渲染input框
                     this.$nextTick(()=>{
                         if (JSON.stringify(this.selected) === '{}') {
                             this.input = '';
@@ -262,22 +249,23 @@
              * @param event
              */
             clickHandler(event) {
-                if (this.listVisible) {
-                    if (event.target !== this.$refs.input) {
+                if (!this.listVisible) return;
+                if (event.target !== this.$refs.input) {
 //                        点击非本组件input区域时，隐藏下拉列表
-                        this.listVisible = false;
-                    }
-                    if (this.input !== '') {
+                    this.listVisible = false;
+                }
+                if (this.input !== '') {
 //                        如果输入框内容不为空，那么默认帮用户做出如下选择：
-                        if (this.autoSelectIfOne && this.matched.length === 1) {
 //                            如果设置了只有一项时自动匹配，那么自动将selected设置为这一项
-                            this.selected = this.matched[0];
-                        }
-                        this.input = this.selectedContent;
-                    } else {
-//                        如果输入框内容为空，那么清空selected的值
-                        this.selected = {};
+                    const shouldSelectTheOnly = this.autoSelectIfOne && this.matched.length === 1;
+
+                    if (shouldSelectTheOnly) {
+                        this.selected = this.matched[0];
                     }
+                    this.input = this.selectedContent;
+                } else {
+//                        如果输入框内容为空，那么清空selected的值
+                    this.selected = {};
                 }
             },
             /**
@@ -326,23 +314,29 @@
             }
         },
         watch: {
-            value() {
-                this.initSelected();
+            value(newVal, oldVal) {
+                if (JSON.stringify(newVal) !== JSON.stringify(oldVal)){
+                    this.initSelected();
+                }
             },
             list() {
                 this.initSelected();
             },
-            input(newVal) {
+            input(newVal, oldVal) {
                 if (newVal === '') {
                     this.selected = {};
+                }
+                if (JSON.stringify(newVal) !== JSON.stringify(oldVal) && !this.autoClear && utility.base.isEmptyObject(this.selected)){
+                    this.$emit('change', this.input);
                 }
             },
             selected(newVal, oldVal){
                 if (JSON.stringify(newVal) !== JSON.stringify(oldVal)) {
                     this.$emit('change', JSON.parse(JSON.stringify(this.selected)));
-                }
-                if (utility.base.isEmptyObject(newVal)) {
-                    this.$emit('clear');
+                    if (utility.base.isEmptyObject(newVal)) {
+                        this.$emit('clear');
+                        this.$emit('change', {});
+                    }
                 }
             }
         }

@@ -1,10 +1,22 @@
 ## 更新日志
 
+### 3.0.0
+
+*2018-04-28*
+
+- 修改 将caseInsensitive改为caseSensitive且默认为false
+
+- 修改 补齐value时，如果value中含有多余的key则忽略，只需匹配list中含有的key即可
+
+- 优化 添加v-model
+
+- 优化 数据被清空时触发clear & change事件; 此前只触发change事件
+
 ### 2.1.1
 
 *2018-04-18*
 
-- 当value值残缺时，匹配list中的项时匹配逻辑出错，导致找到的项和value不对应
+-修复 当value值残缺时，匹配list中的项时匹配逻辑出错，导致找到的项和value不对应
 
 ### 2.1.0
 

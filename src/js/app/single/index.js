@@ -16,6 +16,9 @@ const list = [
         Id: 3,
         Name: 'three'
     }, {
+        Id: 4,
+        Name: 'three'
+    }, {
         Id: '',
         Name: '空值'
     }, {
@@ -31,8 +34,11 @@ const a = new Vue({
         matchKeys: ['Id', 'Name'],
         showKeys: ['Id', 'Name'],
         allForEmpty: true,
-        value: {Id: 3},
-        placeholder: '请选择游戏'
+        value: {Id: 1},
+        placeholder: '请选择游戏',
+        autoClear: true,
+        caseSensitive: false,
+        autoSelectIfOne: false
     },
     methods: {
         select: function(item) {
