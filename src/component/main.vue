@@ -146,7 +146,7 @@
              */
             matched() {
                 const shouldFilterByInput = this.input !== '' && !this.focusFlag;
-                const shouldReturnWholeList = this.focusFlag || this.allForEmpty;
+                const shouldReturnWholeList = this.focusFlag && this.allForEmpty || this.allForEmpty;
 
                 if (shouldFilterByInput) {
 //                    input即使有值，如果用户点击input获取焦点时，需忽略input内容并将全部内容显示出来
