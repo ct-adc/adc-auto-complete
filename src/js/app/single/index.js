@@ -33,12 +33,13 @@ const a = new Vue({
         keys: ['Id', 'Name'],
         matchKeys: ['Id', 'Name'],
         showKeys: ['Id', 'Name'],
-        allForEmpty: false,
+        allForEmpty: true,
         value: {Id: 1},
         placeholder: '请选择游戏',
         autoClear: true,
         caseSensitive: false,
-        autoSelectIfOne: false
+        autoSelectIfOne: false,
+        sticky: false
     },
     methods: {
         select: function(item) {

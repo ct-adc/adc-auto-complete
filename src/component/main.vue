@@ -114,11 +114,6 @@
                 // 当只有一项匹配时自动选择该项
                 type: Boolean,
                 default: false
-            },
-            sticky: {
-                // 当选择一项后，如果删除input中的部分内容，但没有完全删除，是否需要恢复到原来的值
-                type: Boolean,
-                default: false
             }
         },
         data() {
@@ -145,15 +140,15 @@
              * @returns {*}
              */
             matched() {
-                const shouldFilterByInput = this.input !== '' && !this.focusFlag;
                 const shouldReturnWholeList = this.focusFlag && this.allForEmpty || this.allForEmpty;
+                const shouldFilterByInput = this.input !== '' && !this.allForEmpty;
 
                 if (shouldFilterByInput) {
 //                    input即使有值，如果用户点击input获取焦点时，需忽略input内容并将全部内容显示出来
                     const matched = this.list.filter(item=>{
                         return matchAtLeastOneKey(item, this.input, this.matchKeys, this.caseSensitive);
                     });
-                    const shouldReverseSelected = this.selectedContent.indexOf(this.input) > -1 && !utility.base.isEmptyObject(this.selected) && this.sticky;
+                    const shouldReverseSelected = this.selectedContent.indexOf(this.input) > -1 && !utility.base.isEmptyObject(this.selected);
 //                        如果当前的结果不是空时，用户只是删除了当前结果的部分input内容，但没有全部删除完（全部删除完时会触发this.selected={}），那么匹配列表中应该包含this.selected这条数据
                    
                     if (matched.length > 0) {
@@ -254,17 +249,32 @@
 //                        点击非本组件input区域时，隐藏下拉列表
                     this.listVisible = false;
                 }
+                
                 if (this.input !== '') {
 //                        如果输入框内容不为空，那么默认帮用户做出如下选择：
-//                            如果设置了只有一项时自动匹配，那么自动将selected设置为这一项
+                    const mayDelSelectedInput = this.selectedContent.indexOf(this.input) > -1 && !utility.base.isEmptyObject(this.selected);
                     const shouldSelectTheOnly = this.autoSelectIfOne && this.matched.length === 1;
 
-                    if (shouldSelectTheOnly) {
+                    if (this.autoClear && mayDelSelectedInput){
+                        // 如果用户只是删除了部分已选中的项的内容，且设置了自动清空，那么帮用户补上该值
+                        this.input = this.selectedContent;
+                    } else if (shouldSelectTheOnly){
+//                      如果设置了只有一项时自动匹配，那么自动将selected设置为这一项
                         this.selected = this.matched[0];
+                        this.input = this.selectedContent;
+                    } else if (!this.autoClear){
+                        const input = this.input;
+
+                        this.selected = {};
+                        setTimeout(()=>{
+                            this.input = input;
+                        });
+                    } else {
+                        this.selected = {};
+                        this.input = this.selectedContent;
                     }
-                    this.input = this.selectedContent;
                 } else {
-//                        如果输入框内容为空，那么清空selected的值
+    //                        如果输入框内容为空，那么清空selected的值
                     this.selected = {};
                 }
             },
