@@ -274,7 +274,7 @@
                         this.input = this.selectedContent;
                     }
                 } else {
-    //                        如果输入框内容为空，那么清空selected的值
+    //             如果输入框内容为空，那么清空selected的值
                     this.selected = {};
                 }
             },

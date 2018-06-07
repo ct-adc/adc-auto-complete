@@ -2,7 +2,7 @@
 
 ### 3.0.0-alpha.3
 
-**
+*2018-06-07*
 
 - 修复 修复window click handler逻辑
 
