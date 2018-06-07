@@ -7,18 +7,10 @@ new Vue({
         AutoComplete
     },
     data: {
-        value: {AppId: 10861, AppCode: 'mjdz', AppType: 2},
+        // value: {AppId: 10861, AppCode: 'mjdz', AppType: 2},
         ContentJson: [
             {
                 AppId: 10865, AppCode: 'wfbk', AppType: 2
-            }, {
-                AppId: 10865,
-                AppCode: 'wfbk',
-                AppType: 2
-            }, {AppId: 10861, AppCode: 'mjdz', AppType: 2}, {
-                AppId: 10865,
-                AppCode: 'wfbk',
-                AppType: 2
             }],
         appList: [
             {
@@ -62,5 +54,10 @@ new Vue({
                 IconList: 'http://gsimg.tcy365.com/icon/undefined_80_1523346104.png,http://gsimg.tcy365.com/icon/undefined_130_1523346106.png'
             }
         ]
+    },
+    methods: {
+        empty(){
+            this.ContentJson = [{}, {}, {}];
+        }
     }
 });

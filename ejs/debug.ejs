@@ -9,12 +9,15 @@
 <body>
 
 <div id="app">
-    <!--<div class="col-md-4 mb5" v-for="(el, index) in ContentJson" :class="{'col-md-offset-2': index === 2}">-->
-        <!--<auto-complete placeholder="请输入应用名称、ID或缩写" :value="el" :list="appList" :keys="['AppCode', 'AppName']"-->
-                       <!--:match-keys="['AppCode', 'AppName']" :show-keys="['AppCode', 'AppName']" autoClear></auto-complete>-->
+    <div class="col-md-4 mb5" v-for="(el, index) in ContentJson" :class="{'col-md-offset-2': index === 2}">
+        <auto-complete placeholder="请输入应用名称、ID或缩写" :value="el" :list="appList" :keys="['AppCode', 'AppName']"
+                       :match-keys="['AppCode', 'AppName']" :show-keys="['AppCode', 'AppName']" autoClear></auto-complete></div>
+    <button type="button" class="btn btn-sm btn-primary" @click="empty">
+        清空
+    </button>
     <!--</div>-->
-    <auto-complete placeholder="请输入应用名称、ID或缩写" :value="value" :list="appList" :keys="['AppCode', 'AppName']"
-                   :match-keys="['AppCode', 'AppName']" :show-keys="['AppCode', 'AppName']" autoClear></auto-complete>
+    <!--<auto-complete placeholder="请输入应用名称、ID或缩写" :value="value" :list="appList" :keys="['AppCode', 'AppName']"-->
+                   <!--:match-keys="['AppCode', 'AppName']" :show-keys="['AppCode', 'AppName']" autoClear></auto-complete>-->
 </div>
 <script src="http://static.tcy365.com/cdn/jquery/2.1.0/jquery.js"></script>
 <script src="http://static.tcy365.com/cdn/bootstrap/3.3.5/js/bootstrap.min.js"></script>
