@@ -157,7 +157,7 @@
                         return [this.selected];
                     }
 //                    如果没有匹配出任何数据
-                    if (this.autoSelectIfOne) {
+                    if (this.autoSelectIfOne && !this.listVisible) {
                         this.selected = {};
                     }
                     return [];

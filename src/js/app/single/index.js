@@ -38,7 +38,7 @@ const a = new Vue({
         placeholder: '请选择游戏',
         autoClear: true,
         caseSensitive: false,
-        autoSelectIfOne: false,
+        autoSelectIfOne: true,
         sticky: false
     },
     methods: {

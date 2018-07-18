@@ -16,9 +16,20 @@
                         <div class="form-group form-group-sm">
                             <label class="col-sm-4 control-label">不匹配时不清空</label>
                             <div class="col-sm-8">
-                                <auto-complete :list="list" :keys="keys" :match-keys="matchKeys" :show-keys="showKeys" :all-for-empty="allForEmpty" v-model="value"
-                                    :placeholder="placeholder" :maxlength="10" :auto-clear="autoClear" :case-sensitive="caseSensitive"
-                                    :auto-select-if-one="autoSelectIfOne" @change="change(arguments, 1)" @change-val="select" :sticky="sticky"
+                                <auto-complete :list="list" 
+                                    :keys="keys" 
+                                    :match-keys="matchKeys" 
+                                    :show-keys="showKeys" 
+                                    :all-for-empty="allForEmpty" 
+                                    v-model="value"
+                                    :placeholder="placeholder" 
+                                    :maxlength="10" 
+                                    :auto-clear="autoClear" 
+                                    :case-sensitive="caseSensitive"
+                                    :auto-select-if-one="autoSelectIfOne" 
+                                    @change="change(arguments, 1)" 
+                                    @change-val="select" 
+                                    :sticky="sticky"
                                     ref="autoC"></auto-complete>
                             </div>
                         </div>
