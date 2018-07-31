@@ -140,23 +140,24 @@
              * @returns {*}
              */
             matched() {
+                // input即使有值，如果用户点击input获取焦点时，需忽略input内容并将全部内容显示出来
                 const shouldReturnWholeList = (this.focusFlag || this.input === '') && this.allForEmpty;
                 const shouldFilterByInput = this.input !== '' && (!this.focusFlag || this.focusFlag && !this.allForEmpty);
 
                 if (shouldFilterByInput) {
-//                    input即使有值，如果用户点击input获取焦点时，需忽略input内容并将全部内容显示出来
                     const matched = this.list.filter(item=>{
                         return matchAtLeastOneKey(item, this.input, this.matchKeys, this.caseSensitive);
                     });
                     const shouldReverseSelected = this.selectedContent.indexOf(this.input) > -1 && !utility.base.isEmptyObject(this.selected);
-//                        如果当前的结果不是空时，用户只是删除了当前结果的部分input内容，但没有全部删除完（全部删除完时会触发this.selected={}），那么匹配列表中应该包含this.selected这条数据
+                    // 如果当前的结果不是空时，用户只是删除了当前结果的部分input内容，但没有全部删除完（全部删除完时会触发this.selected={}），
+                    // 那么匹配列表中应该包含this.selected这条数据
                    
                     if (matched.length > 0) {
                         return matched;
                     } else if (shouldReverseSelected) {
                         return [this.selected];
                     }
-//                    如果没有匹配出任何数据
+                    // 如果没有匹配出任何数据
                     if (this.autoSelectIfOne && !this.listVisible) {
                         this.selected = {};
                     }
@@ -178,7 +179,8 @@
                 return '没有匹配的内容！';
             },
             /**
-             * selectedContent: 根据当前的数据选择和用户输入情况，计算出的input中应该展示出的内容，大部分情况下input可以选择使用该值
+             * selectedContent: 根据当前的数据选择和用户输入情况，计算出的input中应该展示出的内容，
+             * 大部分情况下input可以选择使用该值
              * @returns { * }
              */
             selectedContent() {
@@ -252,10 +254,13 @@
                 
                 if (this.input !== '') {
 //                        如果输入框内容不为空，那么默认帮用户做出如下选择：
-                    const mayDelSelectedInput = this.selectedContent.indexOf(this.input) > -1 && !utility.base.isEmptyObject(this.selected);
+                    const isSelectedInput = this.selectedContent === this.input && !utility.base.isEmptyObject(this.selected);
+                    const delSelectedInput = this.selectedContent.indexOf(this.input) > -1 && !utility.base.isEmptyObject(this.selected);
                     const shouldSelectTheOnly = this.autoSelectIfOne && this.matched.length === 1;
-
-                    if (this.autoClear && mayDelSelectedInput){
+    
+                    // 如果用户只是在选中的情况下点击了input而未做任何input操作 此时不做任何变更
+                    if (isSelectedInput) return;
+                    if (this.autoClear && delSelectedInput){
                         // 如果用户只是删除了部分已选中的项的内容，且设置了自动清空，那么帮用户补上该值
                         this.input = this.selectedContent;
                     } else if (shouldSelectTheOnly){
@@ -304,6 +309,7 @@
             },
             empty() {
                 this.input = '';
+                this.$emit('clear');
             },
             showList() {
                 this.focusFlag = false;
@@ -336,17 +342,13 @@
                 if (newVal === '') {
                     this.selected = {};
                 }
-                if (JSON.stringify(newVal) !== JSON.stringify(oldVal) && !this.autoClear && utility.base.isEmptyObject(this.selected)){
+                if (newVal !== oldVal && !this.autoClear && utility.base.isEmptyObject(this.selected)){
                     this.$emit('change', this.input);
                 }
             },
             selected(newVal, oldVal){
                 if (JSON.stringify(newVal) !== JSON.stringify(oldVal)) {
                     this.$emit('change', JSON.parse(JSON.stringify(this.selected)));
-                    if (utility.base.isEmptyObject(newVal)) {
-                        this.$emit('clear');
-                        this.$emit('change', {});
-                    }
                 }
             }
         }

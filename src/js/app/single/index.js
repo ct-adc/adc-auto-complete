@@ -43,6 +43,7 @@ const a = new Vue({
     },
     methods: {
         select: function(item) {
+            console.log('select');
             this.value = item;
         },
         getValue: function() {
@@ -58,11 +59,14 @@ const a = new Vue({
             this.value = 'ruby';
         },
         change: function(item, index) {
-            console.log(...item, index);
+            console.log('change', ...item, index);
         },
         search: function() {
             console.log('search');
             console.log(this.$refs.autoC.getValue());
+        },
+        clear(){
+            console.log('clear');
         }
     }
 });

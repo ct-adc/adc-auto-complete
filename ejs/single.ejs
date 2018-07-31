@@ -9,6 +9,7 @@
 
 <body>
     <div id="app">
+        
         <div class="well well-sm clearfix">
             <form action="javascript:;" class="form-horizontal form-horizontal-sm">
                 <div class="col-lg-11 col-sm-11 text-nowrap">
@@ -20,17 +21,19 @@
                                     :keys="keys" 
                                     :match-keys="matchKeys" 
                                     :show-keys="showKeys" 
-                                    :all-for-empty="allForEmpty" 
                                     v-model="value"
                                     :placeholder="placeholder" 
                                     :maxlength="10" 
+                                    :all-for-empty="allForEmpty" 
+                                    :sticky="sticky"
                                     :auto-clear="autoClear" 
                                     :case-sensitive="caseSensitive"
-                                    :auto-select-if-one="autoSelectIfOne" 
+                                    :auto-select-if-one="autoSelectIfOne"
                                     @change="change(arguments, 1)" 
                                     @change-val="select" 
-                                    :sticky="sticky"
+                                    @clear="clear"
                                     ref="autoC"></auto-complete>
+                                     
                             </div>
                         </div>
                     </div>
