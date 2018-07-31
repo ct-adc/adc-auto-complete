@@ -38,11 +38,12 @@ const a = new Vue({
         placeholder: '请选择游戏',
         autoClear: true,
         caseSensitive: false,
-        autoSelectIfOne: false,
+        autoSelectIfOne: true,
         sticky: false
     },
     methods: {
         select: function(item) {
+            console.log('select');
             this.value = item;
         },
         getValue: function() {
@@ -58,11 +59,14 @@ const a = new Vue({
             this.value = 'ruby';
         },
         change: function(item, index) {
-            console.log(...item, index);
+            console.log('change', ...item, index);
         },
         search: function() {
             console.log('search');
             console.log(this.$refs.autoC.getValue());
+        },
+        clear(){
+            console.log('clear');
         }
     }
 });
