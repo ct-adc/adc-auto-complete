@@ -354,32 +354,4 @@
         }
     };
 </script>
-<style scoped>
-    .autoComplete .dropdown-menu {
-        width: 100%;
-        max-height: 400px;
-        overflow-y: scroll;
-        display: block;
-    }
-
-    .autoComplete .dropdown-menu li {
-        cursor: pointer;
-    }
-
-    .autoComplete .noResult {
-        padding: 3px 20px;
-    }
-
-    .form-control-feedback {
-        cursor: pointer;
-        pointer-events: inherit;
-    }
-
-    .has-feedback {
-        padding-right: 25px;
-    }
-
-    .has-feedback::-ms-clear {
-        display: none;
-    }
-</style>
+<style scoped src="./style.css"></style>
