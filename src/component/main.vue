@@ -39,10 +39,11 @@
     import data from './module/data';
     import computed from './module/computed';
     import methods from './module/methods';
+    import watch from './module/watch';
 
     export default {
         name: 'auto-complete',
-        mixins: [props, data, computed, methods],
+        mixins: [props, data, computed, methods, watch],
         model: {
             prop: 'value',
             event: 'change'

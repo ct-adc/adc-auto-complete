@@ -64,16 +64,16 @@ export default {
                     // 如果设置了只有一项时自动匹配，那么自动将selected设置为这一项
                     this.selected = this.matched[0];
                     this.input = this.selectedContent;
-                } else if (!this.autoClear){
+                } else if (this.autoClear){
+                    this.selected = {};
+                    this.input = this.selectedContent;
+                } else {
                     const input = this.input;
 
                     this.selected = {};
-                    setTimeout(()=>{
+                    this.$nextTick(()=>{
                         this.input = input;
                     });
-                } else {
-                    this.selected = {};
-                    this.input = this.selectedContent;
                 }
             } else {
                 // 如果输入框内容为空，那么清空selected的值
