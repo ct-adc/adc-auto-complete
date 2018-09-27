@@ -12,7 +12,7 @@ export default {
             if (typeof value === 'string') {
                 // 如果value是一个字符串，那么它指的是input中应该展示该内容，那么此时意味着并没有选中数据源中的任何一项
                 this.input = value;
-                this.selected = {};
+                this.setSelected({});
             } else if (typeof value === 'object') {
                 // 如果value是一个对象，即初始时已经有选中的数据
                 let targetItems;
@@ -23,14 +23,14 @@ export default {
                     targetItems = getMatchListByBrokenValue(value, this.list);
 
                     if (targetItems.length > 0) {
-                        this.selected = targetItems[0];
+                        this.setSelected(targetItems[0]);
                     }
                 } else {
-                    this.selected = this.value;
+                    this.setSelected(this.value);
                 }
                 // 修正好selected对象后，更新input的值，以便及时渲染input框
                 this.$nextTick(()=>{
-                    if (JSON.stringify(this.selected) === '{}') {
+                    if (utility.base.isEmptyObject(this.selected)) {
                         this.input = '';
                     } else {
                         this.input = this.selectedContent;
@@ -62,22 +62,22 @@ export default {
                     this.input = this.selectedContent;
                 } else if (shouldSelectTheOnly){
                     // 如果设置了只有一项时自动匹配，那么自动将selected设置为这一项
-                    this.selected = this.matched[0];
+                    this.setSelected(this.matched[0]);
                     this.input = this.selectedContent;
                 } else if (this.autoClear){
-                    this.selected = {};
+                    this.setSelected({});
                     this.input = this.selectedContent;
                 } else {
                     const input = this.input;
 
-                    this.selected = {};
+                    this.setSelected({});
                     this.$nextTick(()=>{
                         this.input = input;
                     });
                 }
             } else {
                 // 如果输入框内容为空，那么清空selected的值
-                this.selected = {};
+                this.setSelected({});
             }
         },
         /**
@@ -92,14 +92,14 @@ export default {
             const selectedItem = JSON.parse(JSON.stringify(item));
 
             this.$emit('select', selectedItem);
-            this.selected = selectedItem;
+            this.setSelected(selectedItem);
             this.$nextTick(()=>{
                 this.input = this.selectedContent;
             });
             this.listVisible = false;
         },
         getValue() {
-            if (!this.autoClear && JSON.stringify(this.selected) === '{}') {
+            if (!this.autoClear && utility.base.isEmptyObject(this.selected)) {
                 return this.input;
             }
             return JSON.parse(JSON.stringify(this.selected));
@@ -115,7 +115,7 @@ export default {
         hideList() {
             this.listVisible = false;
             if (this.autoSelectIfOne && this.matched.length === 1) {
-                this.selected = this.matched[0];
+                this.setSelected(this.matched[0]);
                 this.$nextTick(() => {
                     this.input = this.selectedContent;
                 });
@@ -124,6 +124,21 @@ export default {
                 this.input = this.selectedContent;
             }
             this.focusFlag = false;
+        },
+        setSelected(selected, emit = true){
+            var oldSelected = JSON.stringify(this.selected);
+                        
+            this.selected = selected;
+            if (emit && oldSelected !== JSON.stringify(selected)){
+                this.emitChange();
+            }
+        },
+        emitChange(){
+            if (this.autoClear || !utility.base.isEmptyObject(this.selected)){
+                this.$emit('change', JSON.parse(JSON.stringify(this.selected)));
+            } else {
+                this.$emit('change', this.selectedContent);
+            }
         }
     }
 };

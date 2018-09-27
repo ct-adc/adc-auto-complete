@@ -17,11 +17,6 @@ export default {
             if (newVal !== oldVal && !this.autoClear && utility.base.isEmptyObject(this.selected)){
                 this.$emit('change', this.input);
             }
-        },
-        selected(newVal, oldVal){
-            if (JSON.stringify(newVal) !== JSON.stringify(oldVal)) {
-                this.$emit('change', JSON.parse(JSON.stringify(this.selected)));
-            }
         }
     }
 };

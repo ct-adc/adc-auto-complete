@@ -36,7 +36,7 @@ const a = new Vue({
         allForEmpty: true,
         value: {Id: 1},
         placeholder: '请选择游戏',
-        autoClear: true,
+        autoClear: false,
         caseSensitive: false,
         autoSelectIfOne: true,
         sticky: false
@@ -47,7 +47,7 @@ const a = new Vue({
             this.value = item;
         },
         getValue: function() {
-            console.log(this.$refs.autoC.getValue());
+            console.log(JSON.stringify(this.$refs.autoC.getValue()));
         },
         reset: function() {
             this.value = {};
@@ -63,7 +63,7 @@ const a = new Vue({
         },
         search: function() {
             console.log('search');
-            console.log(this.$refs.autoC.getValue());
+            console.log(JSON.stringify(this.$refs.autoC.getValue()));
         },
         clear(){
             console.log('clear');

@@ -8,32 +8,39 @@ export default {
          * @returns {*}
          */
         matched() {
+            let matched;
             // input即使有值，如果用户点击input获取焦点时，需忽略input内容并将全部内容显示出来
             const shouldReturnWholeList = (this.focusFlag || this.input === '') && this.allForEmpty;
             const shouldFilterByInput = this.input !== '' && (!this.focusFlag || this.focusFlag && !this.allForEmpty);
 
             if (shouldFilterByInput) {
-                const matched = this.list.filter(item=>{
+                const matchedByInput = this.list.filter(item=>{
                     return matchAtLeastOneKey(item, this.input, this.matchKeys, this.caseSensitive);
                 });
-                const shouldReverseSelected = this.selectedContent.indexOf(this.input) > -1 && !utility.base.isEmptyObject(this.selected);
-                // 如果当前的结果不是空时，用户只是删除了当前结果的部分input内容，但没有全部删除完（全部删除完时会触发this.selected={}），
-                // 那么匹配列表中应该包含this.selected这条数据
+                const rmSomeButAutoClear = this.selectedContent.indexOf(this.input) > -1 && !utility.base.isEmptyObject(this.selected) && this.autoClear;
+                const equalTotally = this.selectedContent === this.input && !utility.base.isEmptyObject(this.selected);
+                const shouldReverseSelected = rmSomeButAutoClear || equalTotally;
+                /* 1.如果当前的结果不是空时，用户只是删除了当前结果的部分input内容，但没有全部删除完（全部删除完时会触发this.selected={}），如果此时用户设置了autoClear（即只能选择list中的内容，不允许用户自己输入其他的内容），那么匹配列表中应该包含this.selected这条数据 
+                2.如果用户没有对input进行任何编辑，此时应保持selected值*/
                
-                if (matched.length > 0) {
-                    return matched;
+                if (matchedByInput.length > 0) {
+                    matched = matchedByInput;
                 } else if (shouldReverseSelected) {
-                    return [this.selected];
+                    matched = [this.selected];
+                } else {
+                    matched = [];
+                    if (!this.autoClear){
+                        // 当autoClear为true时，不能实时清空selected，因为会引发input中的内容更新为空值，且autoClear为true时，需要reverseSelected，故不能清空selected
+                        // 即：当autoClear为false时，input值的编辑会随时影响最终结果，但autoClear为true时，则会有少许记忆功能，以便值的恢复
+                        this.setSelected({});
+                    }
                 }
-                // 如果没有匹配出任何数据
-                // if (this.autoSelectIfOne && !this.listVisible) {
-                //     this.selected = {};
-                // }
-                return [];
             } else if (shouldReturnWholeList) {
-                return this.list;
+                matched = this.list;
+            } else {
+                matched = [];
             }
-            return [];
+            return matched;
         },
         /**
          * info: 当匹配出的数据子集为空时，下方列表显示出的提示信息

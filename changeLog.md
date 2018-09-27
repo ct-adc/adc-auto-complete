@@ -1,5 +1,11 @@
 ## 更新日志
 
+### 3.1.0
+
+- 修复 #1 autoClear为false时，编辑input后将selected清空，autoClear为true时，编辑input后selected不清空
+
+- 修复 #2 只有在autoClear为ture时才考虑reverseSelected
+
 ### 3.0.0
 
 *2018-07-31*

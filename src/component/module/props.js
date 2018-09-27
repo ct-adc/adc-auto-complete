@@ -61,7 +61,7 @@ export default {
             default: 100000
         },
         autoClear: {
-            // 没有匹配到内容时是否清空
+            // 没有匹配到内容时或者选择后对input进行编辑，是否清空选择的值
             type: Boolean,
             default: false
         },
