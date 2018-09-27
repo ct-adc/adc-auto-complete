@@ -26,9 +26,9 @@ export default {
                     return [this.selected];
                 }
                 // 如果没有匹配出任何数据
-                if (this.autoSelectIfOne && !this.listVisible) {
-                    this.selected = {};
-                }
+                // if (this.autoSelectIfOne && !this.listVisible) {
+                //     this.selected = {};
+                // }
                 return [];
             } else if (shouldReturnWholeList) {
                 return this.list;
