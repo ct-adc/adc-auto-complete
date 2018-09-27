@@ -10,16 +10,16 @@ export default {
             const value = this.value;
 
             if (typeof value === 'string') {
-//                    如果value是一个字符串，那么它指的是input中应该展示该内容，那么此时意味着并没有选中数据源中的任何一项
+                // 如果value是一个字符串，那么它指的是input中应该展示该内容，那么此时意味着并没有选中数据源中的任何一项
                 this.input = value;
                 this.selected = {};
             } else if (typeof value === 'object') {
-//                    如果value是一个对象，即初始时已经有选中的数据
+                // 如果value是一个对象，即初始时已经有选中的数据
                 let targetItems;
                 const valueIsBroken = isValueBroken(value, this.list);
 
                 if (valueIsBroken) {
-//                        当value相比list是不完整对象时，根据list修正这个对象
+                    // 当value相比list是不完整对象时，根据list修正这个对象
                     targetItems = getMatchListByBrokenValue(value, this.list);
 
                     if (targetItems.length > 0) {
@@ -28,7 +28,7 @@ export default {
                 } else {
                     this.selected = this.value;
                 }
-//                    修正好selected对象后，更新input的值，以便及时渲染input框
+                // 修正好selected对象后，更新input的值，以便及时渲染input框
                 this.$nextTick(()=>{
                     if (JSON.stringify(this.selected) === '{}') {
                         this.input = '';
@@ -45,12 +45,12 @@ export default {
         clickHandler(event) {
             if (!this.listVisible) return;
             if (event.target !== this.$refs.input) {
-//                        点击非本组件input区域时，隐藏下拉列表
+                // 点击非本组件input区域时，隐藏下拉列表
                 this.listVisible = false;
             }
             
             if (this.input !== '') {
-//                        如果输入框内容不为空，那么默认帮用户做出如下选择：
+                // 如果输入框内容不为空，那么默认帮用户做出如下选择：
                 const isSelectedInput = this.selectedContent === this.input && !utility.base.isEmptyObject(this.selected);
                 const delSelectedInput = this.selectedContent.indexOf(this.input) > -1 && !utility.base.isEmptyObject(this.selected);
                 const shouldSelectTheOnly = this.autoSelectIfOne && this.matched.length === 1;
@@ -61,7 +61,7 @@ export default {
                     // 如果用户只是删除了部分已选中的项的内容，且设置了自动清空，那么帮用户补上该值
                     this.input = this.selectedContent;
                 } else if (shouldSelectTheOnly){
-//                      如果设置了只有一项时自动匹配，那么自动将selected设置为这一项
+                    // 如果设置了只有一项时自动匹配，那么自动将selected设置为这一项
                     this.selected = this.matched[0];
                     this.input = this.selectedContent;
                 } else if (!this.autoClear){
@@ -76,7 +76,7 @@ export default {
                     this.input = this.selectedContent;
                 }
             } else {
-//             如果输入框内容为空，那么清空selected的值
+                // 如果输入框内容为空，那么清空selected的值
                 this.selected = {};
             }
         },

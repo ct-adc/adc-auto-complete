@@ -55,7 +55,7 @@ export default {
             const content = [];
 
             if (!utility.base.isEmptyObject(this.selected)){
-//                    selected有值时，根据showKeys算出应该填入input中的内容
+                // selected有值时，根据showKeys算出应该填入input中的内容
                 this.showKeys.map(key=>{
                     if (typeof this.selected[key] !== 'undefined') {
                         content.push(this.selected[key]);
@@ -66,10 +66,10 @@ export default {
                 }
             }
             if (this.autoClear) {
-//                    如果没有选择任何一项数据，且配置了不匹配就清空内容时，将其重置为''
+                // 如果没有选择任何一项数据，且配置了不匹配就清空内容时，将其重置为''
                 return '';
             }
-//                如果不匹配也不清空内容时，那么保持当前input的内容不变
+            // 如果不匹配也不清空内容时，那么保持当前input的内容不变
             return this.input;
         }
     }
