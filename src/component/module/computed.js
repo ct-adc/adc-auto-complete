@@ -78,7 +78,7 @@ export default {
                     }
                 });
                 if (content.length > 0) {
-                    contentStr = content.join(' | ');
+                    contentStr = content.join(this.sep);
                 }
             } else {
                 // 保持当前input的内容不变

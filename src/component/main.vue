@@ -22,7 +22,7 @@
                         <a>
                         <span v-for="(key,index) in keys" :key="index">
                             {{item[key]}}
-                            <span v-if="index!=keys.length-1">|</span>
+                            <span v-if="index!=keys.length-1">{{sep}}</span>
                         </span>
                         </a>
                     </li>

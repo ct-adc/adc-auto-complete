@@ -69,6 +69,10 @@ export default {
             // 当只有一项匹配时自动选择该项
             type: Boolean,
             default: false
+        },
+        sep: {
+            type: String,
+            default: ' | '
         }
     }
 };
