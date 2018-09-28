@@ -6,6 +6,14 @@
 
 - 修复 #2 只有在autoClear为ture时才考虑reverseSelected
 
+- 修复 #3 clickHandler中对于reverseSelect的条件针对autoClear做了两种条件判断（不做处理应该也可以，需测试）
+
+- 修复 #4 clickHandler中对于autoClear为false时不做额外处理
+
+- 优化 #5 input中的值如果只是N个空格，则被当做空处理
+
+- 优化 
+
 ### 3.0.0
 
 *2018-07-31*

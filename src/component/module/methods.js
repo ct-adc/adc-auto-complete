@@ -1,4 +1,4 @@
-import {isValueBroken, getMatchListByBrokenValue} from './util';
+import { isValueBroken, getMatchListByBrokenValue } from './util';
 import utility from 'ct-utility';
 
 export default {
@@ -29,7 +29,7 @@ export default {
                     this.setSelected(this.value);
                 }
                 // 修正好selected对象后，更新input的值，以便及时渲染input框
-                this.$nextTick(()=>{
+                this.$nextTick(() => {
                     if (utility.base.isEmptyObject(this.selected)) {
                         this.input = '';
                     } else {
@@ -48,37 +48,7 @@ export default {
                 // 点击非本组件input区域时，隐藏下拉列表
                 this.listVisible = false;
             }
-            
-            if (this.input !== '') {
-                // 如果输入框内容不为空，那么默认帮用户做出如下选择：
-                const isSelectedInput = this.selectedContent === this.input && !utility.base.isEmptyObject(this.selected);
-                const delSelectedInput = this.selectedContent.indexOf(this.input) > -1 && !utility.base.isEmptyObject(this.selected);
-                const shouldSelectTheOnly = this.autoSelectIfOne && this.matched.length === 1;
-
-                // 如果用户只是在选中的情况下点击了input而未做任何input操作 此时不做任何变更
-                if (isSelectedInput) return;
-                if (this.autoClear && delSelectedInput){
-                    // 如果用户只是删除了部分已选中的项的内容，且设置了自动清空，那么帮用户补上该值
-                    this.input = this.selectedContent;
-                } else if (shouldSelectTheOnly){
-                    // 如果设置了只有一项时自动匹配，那么自动将selected设置为这一项
-                    this.setSelected(this.matched[0]);
-                    this.input = this.selectedContent;
-                } else if (this.autoClear){
-                    this.setSelected({});
-                    this.input = this.selectedContent;
-                } else {
-                    const input = this.input;
-
-                    this.setSelected({});
-                    this.$nextTick(()=>{
-                        this.input = input;
-                    });
-                }
-            } else {
-                // 如果输入框内容为空，那么清空selected的值
-                this.setSelected({});
-            }
+            this.confirmValueIfHideList();
         },
         /**
          * 获取焦点时显示下拉列表，同时同步focus事件给全局，因为其他的计算属性之类的视focus事件会做出特殊的处理
@@ -93,7 +63,7 @@ export default {
 
             this.$emit('select', selectedItem);
             this.setSelected(selectedItem);
-            this.$nextTick(()=>{
+            this.$nextTick(() => {
                 this.input = this.selectedContent;
             });
             this.listVisible = false;
@@ -114,27 +84,53 @@ export default {
         },
         hideList() {
             this.listVisible = false;
-            if (this.autoSelectIfOne && this.matched.length === 1) {
-                this.setSelected(this.matched[0]);
-                this.$nextTick(() => {
-                    this.input = this.selectedContent;
-                });
-            }
-            if (this.autoClear) {
-                this.input = this.selectedContent;
-            }
             this.focusFlag = false;
+            this.confirmValueIfHideList();
         },
-        setSelected(selected, emit = true){
+        confirmValueIfHideList() {
+            if (this.input.match(/^\s*$/)) {
+                // 如果输入框内容为空，那么清空selected的值
+                this.setSelected({});
+                this.input = '';
+            } else {
+                // 如果输入框内容不为空，那么默认帮用户做出如下选择：
+                const isSelectedInput =
+                    !utility.base.isEmptyObject(this.selected) &&
+                    this.selectedContent === this.input;
+                const rmSomeButAutoClear =
+                    this.selectedContent.indexOf(this.input) > -1 &&
+                    !utility.base.isEmptyObject(this.selected) &&
+                    this.autoClear;
+                const shouldReverseSelected = rmSomeButAutoClear;
+                const shouldSelectTheOnly = this.autoSelectIfOne && this.matched.length === 1;
+                const shouldClear =
+                    this.selectedContent.indexOf(this.input) === -1 && this.autoClear;
+
+                // 如果用户只是在选中的情况下点击了input而未做任何input操作 此时不做任何变更
+                if (isSelectedInput) return;
+                if (shouldReverseSelected) {
+                    // 如果用户只是删除了部分已选中的项的内容，且设置了自动清空，那么帮用户补上该值
+                    this.input = this.selectedContent;
+                } else if (shouldSelectTheOnly) {
+                    // 如果设置了只有一项时自动匹配，那么自动将selected设置为这一项
+                    this.setSelected(this.matched[0]);
+                    this.input = this.selectedContent;
+                } else if (shouldClear) {
+                    this.setSelected({});
+                    this.input = '';
+                }
+            }
+        },
+        setSelected(selected, emit = true) {
             var oldSelected = JSON.stringify(this.selected);
-                        
+
             this.selected = selected;
-            if (emit && oldSelected !== JSON.stringify(selected)){
+            if (emit && oldSelected !== JSON.stringify(selected)) {
                 this.emitChange();
             }
         },
-        emitChange(){
-            if (this.autoClear || !utility.base.isEmptyObject(this.selected)){
+        emitChange() {
+            if (this.autoClear || !utility.base.isEmptyObject(this.selected)) {
                 this.$emit('change', JSON.parse(JSON.stringify(this.selected)));
             } else {
                 this.$emit('change', this.selectedContent);
