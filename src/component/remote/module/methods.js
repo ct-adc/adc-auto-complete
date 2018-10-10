@@ -26,10 +26,11 @@ export default {
             this.remoteMethod(query).then(data=>{
                 this.loading = false;
                 this.list = data;
+                this.loadMsg = '';
             }).catch(msg=>{
                 this.loading = false;
                 this.list = [];
-                this.emptyText = msg;
+                this.loadMsg = msg;
             });
         },
         select(item, e){

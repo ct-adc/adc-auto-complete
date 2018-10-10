@@ -5,7 +5,8 @@ export default {
             input: '', // input框中的内容
             listVisible: false, // 下拉框是否可见
             selected: {}, // 选中的项
-            loading: false
+            loading: false,
+            loadMsg: ''
         };
     }
 };

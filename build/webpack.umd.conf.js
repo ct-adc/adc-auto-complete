@@ -2,7 +2,7 @@ var path = require('path');
 var webpack = require('webpack');
 module.exports = {
     entry: {
-        index:'./src/component/main.vue'
+        index:'./src/component/index'
     },
     output: {
         path: path.resolve(__dirname, '../lib'),

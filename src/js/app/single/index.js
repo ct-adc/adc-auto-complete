@@ -1,5 +1,5 @@
 import Vue from 'vue';
-import AutoComplete from 'local/main.vue';
+import {local as AutoComplete} from 'index';
 
 Vue.component(AutoComplete.name, AutoComplete);
 

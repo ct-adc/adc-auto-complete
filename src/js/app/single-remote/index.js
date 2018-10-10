@@ -1,5 +1,5 @@
 import Vue from 'vue';
-import AutoComplete from 'remote/main.vue';
+import {remote as AutoComplete} from 'index.js';
 
 Vue.component(AutoComplete.name, AutoComplete);
 
@@ -38,17 +38,16 @@ new Vue({
     },
     methods: {
         remoteMethod(query = ''){
-            return new Promise((resolve)=>{
+            return new Promise((resolve, reject)=>{
                 clearTimeout(this.timeout);
                 this.timeout = setTimeout(()=>{
                     const filtered = list.filter(item=>(item.Id + '').indexOf(query) > -1 || item.Name.indexOf(query) > -1);
 
-                    resolve(filtered);
-                    // if (Math.random() > 0.3){
-                    //     resolve(filtered);
-                    // } else {
-                    //     reject();
-                    // }
+                    if (Math.random() > 0.3){
+                        resolve(filtered);
+                    } else {
+                        reject('加载出错');
+                    }
                 }, 1000);
             });
         },

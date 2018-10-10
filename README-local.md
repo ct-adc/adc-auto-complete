@@ -32,6 +32,7 @@ maxlength | 输入框输入字数限制 | Number | 100000 | 任何数字 | 输�
 caseSensitive | 匹配时是否区分大小写 | Boolean | false | true/false | 匹配数据源中的内容时，是否区分大小写 |
 autoClear | 不匹配时自动清空 | Boolean | false | true/false | 是否在不匹配时自动清空input |
 autoSelectIfOne | 仅一条匹配时是否自动选中 | Boolean | false | true/false | 是否在只有一项匹配时自动选中该项 |
+sep | 分隔符 | String | | | 任意字符 | 分隔符 |
 
 ## 方法
 
