@@ -26,8 +26,8 @@ var config= {
   dev: {
     env: require('./dev.env'),
     port: 8080,
-    // host:'localhost',
-    host:'192.168.7.87',
+    host:'localhost',
+    // host:'192.168.7.87',
     autoOpenBrowser: true,
     assetsSubDirectory: 'asset',
     assetsPublicPath: '/',
