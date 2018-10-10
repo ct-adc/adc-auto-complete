@@ -34,6 +34,10 @@ new Vue({
 })
 ```
 
+## 说明文档
+
+[本地匹配](https://github.com/ct-adc/adc-auto-complete/blob/master/README-local.md)
+[远程匹配](https://github.com/ct-adc/adc-auto-complete/blob/master/README-remote.md)
 
    
 ## 更新日志
