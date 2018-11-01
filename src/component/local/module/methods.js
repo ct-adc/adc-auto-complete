@@ -103,8 +103,10 @@ export default {
                     this.autoClear;
                 const shouldReverseSelected = rmSomeButAutoClear;
                 const shouldSelectTheOnly = this.autoSelectIfOne && this.matched.length === 1;
+                // 如果从选中了一个值到随意输入，那么this.selectedContent.indexOf(this.input) === -1,
+                // 如果从空值到随意输入，那么this.selectedContent === this.input
                 const shouldClear =
-                    this.selectedContent.indexOf(this.input) === -1 && this.autoClear;
+                    (this.selectedContent === this.input || this.selectedContent.indexOf(this.input) === -1) && this.autoClear;
 
                 // 如果用户只是在选中的情况下点击了input而未做任何input操作 此时不做任何变更
                 if (isSelectedInput) return;
